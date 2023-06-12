@@ -1,5 +1,7 @@
 package nghhng.footballbooking.dao;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserDAO {
 
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId _id;
 
     private String name;

@@ -1,10 +1,12 @@
 package nghhng.facilityservice.access;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nghhng.facilityservice.middlewares.ObjectIdDeserializer;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -14,6 +16,8 @@ import org.springframework.data.annotation.Id;
 @Builder
 public class GetUserResponse {
 
+
+    @JsonProperty("_id")
     private ObjectId _id;
 
     private String name;

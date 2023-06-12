@@ -42,7 +42,9 @@ public class FacilityService {
                         .address(createFacilityRequest.getAddress())
                         .numOfFields(createFacilityRequest.getNumOfFields())
                 .ownerId(user.get_id())
+//                .fields(createFacilityRequest.getFields())
                 .build();
+        facility.setFields(createFacilityRequest.getFields());
 
         Facility facilitySaved = facilityRepository.save(facility);
         if(facilitySaved != null){

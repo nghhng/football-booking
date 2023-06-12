@@ -1,6 +1,8 @@
 package nghhng.facilityservice.dao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +21,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Facility {
 
     @Id
-    private ObjectId id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId _id;
 
     @JsonProperty(required = true)
     private String name;
@@ -33,7 +36,7 @@ public class Facility {
 
     private ObjectId ownerId;
 
-    private Field[] fields[];
+    private Field[] fields;
 
 
 
