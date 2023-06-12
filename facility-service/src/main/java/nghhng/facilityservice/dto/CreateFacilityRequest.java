@@ -1,22 +1,26 @@
 package nghhng.facilityservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import nghhng.facilityservice.dao.Address;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import nghhng.facilityservice.dao.part.Address;
 import org.bson.types.ObjectId;
 
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class CreateFacilityRequest {
+
+    @JsonProperty(required = true)
+    @NonNull
 
     private String name;
 
+    @JsonProperty(required = true)
+    @NonNull
     private Address address;
 
+    @JsonProperty(required = true)
+    @NonNull
     private String numOfFields;
 
     private ObjectId ownerId;

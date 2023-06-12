@@ -1,10 +1,10 @@
 package nghhng.facilityservice.controllers;
 
 
-import nghhng.facilityservice.dao.Facility;
-import nghhng.facilityservice.dto.CreateFacilityRequest;
 import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
 import nghhng.facilityservice.services.FacilityService;
+import nghhng.facilityservice.dao.Facility;
+import nghhng.facilityservice.dto.CreateFacilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("api/v1/")
 public class FacilityController {
 
     @Autowired
@@ -28,8 +28,8 @@ public class FacilityController {
         return new ResponseEntity<Facility>(facilityService.createFacility(createFacilityRequest), HttpStatus.OK);
     }
 
-//    @PostMapping("getByUsername")
-//    public ResponseEntity<Facility> getFacilityByUsername(@RequestBody GetFacilityByUsernameRequest getFacilityByUsernameRequest){
-//        return new ResponseEntity<Facility>(facilityService.get(getFacilityByUsernameRequest.getUsername()), HttpStatus.OK);
-//    }
+    @PostMapping("getByUsername")
+    public ResponseEntity<Facility[]> getFacilityByUsername(@RequestBody GetFacilityByUsernameRequest getFacilityByUsernameRequest){
+        return new ResponseEntity<Facility[]>(facilityService.getFacilityByUsername(getFacilityByUsernameRequest), HttpStatus.OK);
+    }
 }

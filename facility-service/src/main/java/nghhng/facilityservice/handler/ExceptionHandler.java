@@ -1,6 +1,5 @@
 package nghhng.facilityservice.handler;
 
-import lombok.Data;
 import nghhng.facilityservice.exception.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

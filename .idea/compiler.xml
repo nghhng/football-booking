@@ -7,16 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="service" />
+        <module name="facility-service" />
         <module name="user-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="facility.service" target="17" />
+      <module name="service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="facility-service" options="-parameters" />
       <module name="facility.service" options="-parameters" />
       <module name="service" options="-parameters" />
       <module name="user-service" options="-parameters" />
