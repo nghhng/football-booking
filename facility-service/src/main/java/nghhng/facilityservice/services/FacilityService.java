@@ -8,6 +8,7 @@ import nghhng.facilityservice.dao.Facility;
 import nghhng.facilityservice.dao.Price;
 import nghhng.facilityservice.dto.CreateFacilityRequest;
 import nghhng.facilityservice.dto.CreatePriceRequest;
+import nghhng.facilityservice.dto.GetFacilityByFacilityIdRequest;
 import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
 import nghhng.facilityservice.exception.BaseException;
 import nghhng.facilityservice.repositories.FacilityRepository;
@@ -68,6 +69,11 @@ public class FacilityService {
             throw new BaseException("User not exist");
         }
         Facility[] facility = facilityRepository.findByOwnerId(user.get_id());
+        return facility;
+    }
+    public Facility getFacilityByFacilityId(GetFacilityByFacilityIdRequest request){
+
+        Facility facility = facilityRepository.findBy_id(request.getFacilityId());
         return facility;
     }
 

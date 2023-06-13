@@ -8,26 +8,35 @@ import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.example.dao.part.Field;
 
+import java.sql.Time;
+
 @Data
 @Builder
 @AllArgsConstructor
 public class CreateBookingRequest {
-    @JsonProperty(required = true)
-    @NonNull
-    private String username;
-
-    @JsonProperty(required = true)
     @NonNull
     private ObjectId facilityId;
 
-    private Field field;
-
-    private ObjectId ownerId;
+    @NonNull
+    private String fieldType;
 
     @NonNull
-    private String username;
+    private int numberOfFields;
 
     @NonNull
-    @JsonProperty("fields")
-    private Field[] fields;
+    private ObjectId userId;
+
+    @NonNull
+    private Time startAt;
+
+    @NonNull
+    private Time endAt;
+
+    @NonNull
+    private String date;
+
+    @NonNull
+    private String hasOpponent;
+
+
 }
