@@ -32,4 +32,6 @@ public class Price {
     private Time endAt;
 
     private int amount;
+
+    private String isWeekend;
 }

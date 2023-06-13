@@ -8,7 +8,8 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 
 @SpringBootApplication
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
-@EnableFeignClients public class FacilityServiceApplication {
+@EnableFeignClients
+public class FacilityServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FacilityServiceApplication.class, args);

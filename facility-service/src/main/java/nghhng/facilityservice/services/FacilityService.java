@@ -5,10 +5,14 @@ import nghhng.facilityservice.access.GetUserByUsernameRequest;
 import nghhng.facilityservice.access.GetUserResponse;
 import nghhng.facilityservice.access.UserFeignClient;
 import nghhng.facilityservice.dao.Facility;
+import nghhng.facilityservice.dao.Price;
 import nghhng.facilityservice.dto.CreateFacilityRequest;
+import nghhng.facilityservice.dto.CreatePriceRequest;
 import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
 import nghhng.facilityservice.exception.BaseException;
 import nghhng.facilityservice.repositories.FacilityRepository;
+import nghhng.facilityservice.repositories.PriceRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,8 @@ public class FacilityService {
 
     @Autowired
     private UserFeignClient userFeignClient;
+
+
 
     public List<Facility> getAllFacilities(){
         return facilityRepository.findAll();
@@ -64,6 +70,8 @@ public class FacilityService {
         Facility[] facility = facilityRepository.findByOwnerId(user.get_id());
         return facility;
     }
+
+
 
 
 }
