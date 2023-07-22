@@ -1,14 +1,11 @@
 package org.example.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
-import org.example.dao.part.Field;
-
-import java.sql.Time;
+import org.example.access.Time;
 
 @Data
 @Builder

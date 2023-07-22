@@ -5,10 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.example.dao.part.Field;
+import org.example.access.Time;
+import org.example.dao.part.BookField;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,9 +25,15 @@ public class Booking {
 
     private ObjectId facilityId;
 
-    private Field[] fields;
+    private List<BookField> bookFields;
 
     private ObjectId priceId;
+
+    private Time startAt;
+
+    private Time endAt;
+
+    private String price;
 
     @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
     private String date;

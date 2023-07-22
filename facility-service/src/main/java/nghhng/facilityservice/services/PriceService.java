@@ -30,7 +30,7 @@ public class PriceService {
                 .startAt(createPriceRequest.getStartAt())
                 .endAt(createPriceRequest.getEndAt())
                 .amount(createPriceRequest.getAmount())
-                .isWeekend(createPriceRequest.getIsWeekend())
+                .specialAmount(createPriceRequest.getSpecialAmount())
                 .build();
         Price priceSaved = priceRepository.save(price);
         if(priceSaved==null){
@@ -64,6 +64,9 @@ public class PriceService {
                     continue;
                 }
                 if(field.getName().equals("amount")&&(int)value==0){
+                    continue;
+                }
+                if(field.getName().equals("specialAmount")&&(int)value==0){
                     continue;
                 }
                 else {

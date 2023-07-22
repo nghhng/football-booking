@@ -21,5 +21,5 @@ public interface PriceRepository extends MongoRepository<Price, ObjectId> {
 
     List<Price> findAll();
 
-    List<Price> findByFacilityIdAndFieldTypeAndStartAtAndEndAtAndAmountAndIsWeekend(ObjectId facilityId, String fieldType, Time startAt, Time endAt, int amount, String isWeekend);
+    List<Price> findByFacilityIdAndFieldTypeAndStartAtAndEndAtAndAmountAndSpecialAmount(ObjectId facilityId, String fieldType, Time startAt, Time endAt, int amount, int specialAmount);
 }

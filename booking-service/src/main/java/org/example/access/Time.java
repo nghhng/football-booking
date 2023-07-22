@@ -1,4 +1,4 @@
-package nghhng.facilityservice.dao.part;
+package org.example.access;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

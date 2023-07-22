@@ -25,5 +25,5 @@ public class GetPriceRequest {
 
     private int amount;
 
-    private String isWeekend;
+    private int specialAmount;
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Field {
+public class BookField {
 
     @JsonProperty("index")
     private String index;

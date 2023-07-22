@@ -1,4 +1,4 @@
-package nghhng.facilityservice.dto;
+package org.example.access;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nghhng.facilityservice.dao.part.Time;
 import org.bson.types.ObjectId;
 
 @Data
@@ -25,5 +24,12 @@ public class GetPriceRequest {
 
     private int amount;
 
-    private String isWeekend;
+    private int specialAmount;
+
+    public GetPriceRequest(ObjectId facilityId, String fieldType, Time startAt, Time endAt) {
+        this.facilityId = facilityId;
+        this.fieldType = fieldType;
+        this.startAt = startAt;
+        this.endAt = endAt;
+    }
 }

@@ -33,5 +33,5 @@ public class Price {
 
     private int amount;
 
-    private String isWeekend;
+    private int specialAmount;
 }

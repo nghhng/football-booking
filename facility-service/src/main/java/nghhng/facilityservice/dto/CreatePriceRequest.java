@@ -27,5 +27,5 @@ public class CreatePriceRequest {
     private int amount;
 
     @NonNull
-    private String isWeekend;
+    private int specialAmount;
 }
