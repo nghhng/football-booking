@@ -1,14 +1,15 @@
 package org.example.services;
 
 
+import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.example.access.*;
 import org.example.dao.Booking;
 import org.example.dao.part.BookField;
 import org.example.dto.CreateBookingRequest;
 import org.example.dto.GetAvailableFieldsRequest;
-import org.example.dto.GetAvailableFieldsResponse;
 import org.example.dto.GetBookingRequest;
+import org.example.event.CreateBookingEvent;
 import org.example.exception.BaseException;
 import org.example.repositories.BookingRepository;
 import org.example.utils.Utils;
@@ -16,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class BookingService {
 
     @Autowired
@@ -31,6 +34,10 @@ public class BookingService {
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+//    private final KafkaTemplate<String, CreateBookingEvent> kafkaTemplate;
+
+
 
 
     public Booking createBooking(CreateBookingRequest createBookingRequest){
@@ -85,6 +92,7 @@ public class BookingService {
                 .build();
 
         Booking bookingSaved = bookingRepository.save(booking);
+//        kafkaTemplate.send("notification-topic", new CreateBookingEvent(bookingSaved.get_id().toString()));
         return  bookingSaved;
     }
 

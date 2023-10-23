@@ -9,6 +9,9 @@
         <option value="$PROJECT_DIR$/booking-service/pom.xml" />
         <option value="$PROJECT_DIR$/discovery-server/pom.xml" />
         <option value="$PROJECT_DIR$/api-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/toby-common/pom.xml" />
+        <option value="$PROJECT_DIR$/toby-parent/pom.xml" />
+        <option value="$PROJECT_DIR$/toby-auth/pom.xml" />
       </list>
     </option>
   </component>
