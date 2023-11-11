@@ -1,22 +1,25 @@
 package tunght.toby.common.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.*;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import tunght.toby.common.enums.ERole;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "roles")
+@Builder
+@Document(collection = "roles")
 public class RoleEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
+
     @Enumerated(EnumType.STRING)
     private ERole role;
 }

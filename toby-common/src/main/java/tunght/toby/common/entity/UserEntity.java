@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tunght.toby.common.enums.ERole;
 import tunght.toby.common.enums.EStatus;
 
 import javax.persistence.*;
@@ -44,6 +45,9 @@ public class UserEntity {
     private String image;
 
     private String otp;
+
+    @Enumerated(EnumType.STRING)
+    private Set<ERole> roles;
 
 
     @Enumerated(EnumType.STRING)

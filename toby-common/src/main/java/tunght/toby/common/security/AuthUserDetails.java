@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tunght.toby.common.entity.RoleEntity;
+import tunght.toby.common.enums.ERole;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,10 +15,10 @@ import java.util.Set;
 public class AuthUserDetails implements UserDetails {
     private final ObjectId id;
     private final String email;
-    private final Set<RoleEntity> authorities;
+    private final Set<ERole> authorities;
 
     @Builder
-    public AuthUserDetails(ObjectId id, String email, Set<RoleEntity> authorities) {
+    public AuthUserDetails(ObjectId id, String email, Set<ERole> authorities) {
         this.id = id;
         this.email = email;
         this.authorities = authorities;
@@ -34,8 +35,8 @@ public class AuthUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         var grantedAuthorities = new HashSet<GrantedAuthority>();
-        for (RoleEntity role: this.authorities) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole().name()));
+        for (ERole role: this.authorities) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
         }
         return grantedAuthorities;
     }

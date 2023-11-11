@@ -10,6 +10,7 @@ import tunght.toby.auth.consts.CommonConst;
 import tunght.toby.auth.consts.EUserAction;
 import tunght.toby.auth.dto.UserDto;
 //import tunght.toby.auth.repository.RoleRepository;
+import tunght.toby.auth.repository.RoleRepository;
 import tunght.toby.auth.repository.UserRepository;
 import tunght.toby.auth.utils.MailSender;
 import tunght.toby.common.entity.UserEntity;
@@ -25,6 +26,7 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import static tunght.toby.common.enums.ERole.ROLE_USER;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
         // maybe there are several accounts with the same username, but only 1 account is activated
         userRepository.findAllByUsernameAndStatus(registration.getUsername(), EStatus.ACTIVE).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
 
-
+//Tạm thời chưa sử dụng RoleRepository
         UserEntity userEntity = UserEntity.builder()
                 .username(registration.getUsername())
                 .email(registration.getEmail())
@@ -53,10 +55,11 @@ public class UserServiceImpl implements UserService {
 //                .bio("")
                 .image(CommonConst.DEFAULT_AVATAR_URL)
                 .status(EStatus.INACTIVE)
-//                .roles(new HashSet<>())
+                .roles(new HashSet<>())
                 .build();
-//        final var ROLE_USER = roleRepository.findByRole(ERole.ROLE_USER).orElseThrow(() -> new AppException(Error.ROLE_NOT_FOUND));
-//        userEntity.getRoles().add(ROLE_USER);
+//        final var ROLE_USER = roleRepository.findByRole(ERole.ROLE_USER);
+//                .orElseThrow(() -> new AppException(Error.ROLE_NOT_FOUND));
+        userEntity.getRoles().add(ROLE_USER);
         userEntity = userRepository.save(userEntity);
         mailSender.sendMail(userEntity.getEmail(), EUserAction.VERIFY_EMAIL);
         return UserDto.RegistrationResponse.builder().email(userEntity.getEmail()).build();
@@ -74,7 +77,7 @@ public class UserServiceImpl implements UserService {
         var userDetail = AuthUserDetails.builder()
                 .id(userEntity.getId())
                 .email(userEntity.getEmail())
-//                .authorities(userEntity.getRoles())
+                .authorities(userEntity.getRoles())
                 .build();
         // when a user logged in, (jwt-userInfo)-(string-jsonString) is cached into redis
         var jsonStr = JsonConverter.serializeObject(userDetail);
