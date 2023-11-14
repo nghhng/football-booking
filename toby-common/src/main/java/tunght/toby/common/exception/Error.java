@@ -17,6 +17,8 @@ public enum Error {
     ARTICLE_NOT_FOUND("Bài viết không tồn tại", HttpStatus.NOT_FOUND),
     FAVORITE_NOT_FOUND("Follow không tồn tại", HttpStatus.NOT_FOUND),
     COMMENT_NOT_FOUND("Bình luận không tồn tại", HttpStatus.NOT_FOUND),
+    NUMBER_OF_FIELDS_WRONG("Số lượng sân đăng ký không đúng", HttpStatus.BAD_REQUEST),
+
 
     ;
 

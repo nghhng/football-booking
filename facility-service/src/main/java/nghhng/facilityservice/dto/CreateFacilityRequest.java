@@ -6,6 +6,8 @@ import nghhng.facilityservice.dao.part.Address;
 import nghhng.facilityservice.dao.part.Field;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -28,5 +30,5 @@ public class CreateFacilityRequest {
 
     @NonNull
     @JsonProperty("fields")
-    private Field[] fields;
+    private List<Field> fields;
 }

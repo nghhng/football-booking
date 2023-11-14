@@ -17,6 +17,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
+import tunght.toby.common.exception.AppException;
+import tunght.toby.common.exception.Error;
 
 import java.util.List;
 
@@ -41,6 +43,10 @@ public class FacilityService {
         GetUserByUsernameRequest getUserByUsernameRequest = new GetUserByUsernameRequest(createFacilityRequest.getUsername());
 
         GetUserResponse user = userFeignClient.getUserByUsername(getUserByUsernameRequest);
+
+        if(Integer.parseInt(createFacilityRequest.getNumOfFields())!=createFacilityRequest.getFields().size()){
+            throw new AppException(Error.NUMBER_OF_FIELDS_WRONG);
+        }
         if(user==null){
             throw new BaseException("User not exist");
         }
