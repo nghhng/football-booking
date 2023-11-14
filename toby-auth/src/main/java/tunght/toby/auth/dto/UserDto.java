@@ -1,11 +1,14 @@
 package tunght.toby.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.bson.types.ObjectId;
+import tunght.toby.common.enums.ERole;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -43,6 +46,10 @@ public class UserDto {
         @NotBlank(message = "Mật khẩu không được để trống")
         @Size(min = 8, max = 32, message = "Mật khẩu phải từ 8-32 kí tự")
         private String password;
+
+        @NotBlank(message = "Role không được để trống")
+        @Size(min = 8, max = 32, message = "ROLE_USER hoặc ROLE_OWNER")
+        private String role;
     }
 
     @Getter

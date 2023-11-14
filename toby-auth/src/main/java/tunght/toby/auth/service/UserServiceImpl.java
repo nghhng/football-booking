@@ -26,6 +26,7 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import static tunght.toby.common.enums.ERole.ROLE_OWNER;
 import static tunght.toby.common.enums.ERole.ROLE_USER;
 @Service
 @RequiredArgsConstructor
@@ -59,7 +60,11 @@ public class UserServiceImpl implements UserService {
                 .build();
 //        final var ROLE_USER = roleRepository.findByRole(ERole.ROLE_USER);
 //                .orElseThrow(() -> new AppException(Error.ROLE_NOT_FOUND));
-        userEntity.getRoles().add(ROLE_USER);
+        if(ERole.isRoleUser(registration.getRole())){
+            userEntity.getRoles().add(ROLE_USER);
+        } else if(ERole.isRoleOwner(registration.getRole())){
+            userEntity.getRoles().add(ROLE_OWNER);
+        } else throw new AppException(Error.ROLE_NOT_FOUND);
         userEntity = userRepository.save(userEntity);
         mailSender.sendMail(userEntity.getEmail(), EUserAction.VERIFY_EMAIL);
         return UserDto.RegistrationResponse.builder().email(userEntity.getEmail()).build();

@@ -7,6 +7,11 @@ import nghhng.footballbooking.dto.GetUserByUsernameRequest;
 import nghhng.footballbooking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tunght.toby.common.entity.UserEntity;
+import tunght.toby.common.exception.AppException;
+import tunght.toby.common.exception.Error;
+import tunght.toby.common.security.AuthUserDetails;
 
 import java.util.List;
 
@@ -43,6 +48,11 @@ public class UserService {
     public UserDAO getUserByUsername(String username){
         UserDAO user = userRepository.findByUsername(username);
         return user;
+    }
+
+    public UserDAO currentUser(AuthUserDetails authUserDetails) {
+        UserDAO userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        return userEntity;
     }
 
 
