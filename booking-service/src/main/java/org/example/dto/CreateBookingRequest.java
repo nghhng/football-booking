@@ -15,10 +15,8 @@ public class CreateBookingRequest {
     private ObjectId facilityId;
 
     @NonNull
-    private String fieldType;
+    private String fieldIndex;
 
-    @NonNull
-    private int numberOfFields;
 
     @NonNull
     private ObjectId userId;

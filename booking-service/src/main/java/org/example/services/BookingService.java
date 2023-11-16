@@ -48,36 +48,40 @@ public class BookingService {
         if(response==null){
             throw new BaseException("Facility not exists");
         }
-        for(Field field : response.getFields()){
-            if(field.getType().equals(createBookingRequest.getFieldType())){
-                if(Integer.parseInt(field.getNumber())<createBookingRequest.getNumberOfFields()){
-                    throw new BaseException("Not enough fields to book");
-                } else break;
-            }
-        }
+//        for(Field field : response.getFields()){
+//            if(field.getType().equals(createBookingRequest.getFieldType())){
+//                if(Integer.parseInt(field.getNumber())<createBookingRequest.getNumberOfFields()){
+//                    throw new BaseException("Not enough fields to book");
+//                } else break;
+//            }
+//        }
+        //get Type of selected field
+        Field selectedField = response.getFields().get(Integer.parseInt(createBookingRequest.getFieldIndex()));
+        String bookingType = selectedField.getType();
+
         //get Price
-        GetPriceRequest getPriceRequest = new GetPriceRequest(createBookingRequest.getFacilityId(), createBookingRequest.getFieldType(), createBookingRequest.getStartAt(), createBookingRequest.getEndAt());
+        GetPriceRequest getPriceRequest = new GetPriceRequest(createBookingRequest.getFacilityId(),bookingType , createBookingRequest.getStartAt(), createBookingRequest.getEndAt());
         List<GetPriceResponse> getPriceResponses = facilityFeignClient.getPrice(getPriceRequest);
 
         String price = new String();
         //check the date is weekend of not then calculate price
         if(!Utils.isWeekend(createBookingRequest.getDate())){
-            price = String.valueOf(getPriceResponses.get(0).getAmount()*createBookingRequest.getNumberOfFields());
+            price = String.valueOf(getPriceResponses.get(0).getAmount());
         } else{
-            price = String.valueOf(getPriceResponses.get(0).getSpecialAmount()*createBookingRequest.getNumberOfFields());
+            price = String.valueOf(getPriceResponses.get(0).getSpecialAmount());
         }
 
 
         ObjectId priceId = getPriceResponses.get(0).get_id();
         //select Field
         //now set Field index random
-        List<BookField> bookFields = new ArrayList<BookField>();
-        for(int i=0; i<createBookingRequest.getNumberOfFields(); i++){
-            BookField bookField = new BookField();
-            bookField.setIndex(String.valueOf(i));
-            bookField.setType(createBookingRequest.getFieldType());
-            bookFields.add(bookField);
-        }
+//        List<BookField> bookFields = new ArrayList<BookField>();
+//        for(int i=0; i<createBookingRequest.getNumberOfFields(); i++){
+//            BookField bookField = new BookField();
+//            bookField.setIndex(String.valueOf(i));
+//            bookField.setType(createBookingRequest.getFieldType());
+//            bookFields.add(bookField);
+//        }
 
         Booking booking = Booking.builder()
                 .facilityId(createBookingRequest.getFacilityId())
@@ -88,7 +92,7 @@ public class BookingService {
                 .startAt(createBookingRequest.getStartAt())
                 .endAt(createBookingRequest.getEndAt())
                 .hasOpponent(createBookingRequest.getHasOpponent())
-                .bookFields(bookFields)
+                .fieldIndex(createBookingRequest.getFieldIndex())
                 .build();
 
         Booking bookingSaved = bookingRepository.save(booking);
@@ -120,7 +124,7 @@ public class BookingService {
         return bookings;
     }
 
-    public Map<String, String> getAvailableFieldsByTimeAndDayAndFacility(GetAvailableFieldsRequest getAvailableFieldsRequest){
+    public List<Field> getAvailableFieldsByTimeAndDayAndFacility(GetAvailableFieldsRequest getAvailableFieldsRequest){
         GetBookingRequest getPlacedBookingRequest = GetBookingRequest.builder()
                 .facilityId(getAvailableFieldsRequest.getFacilityId())
                 .startAt(getAvailableFieldsRequest.getStartAt())
@@ -136,16 +140,14 @@ public class BookingService {
         if(response==null){
             throw new BaseException("Facility not exists");
         }
-        Map<String, String> availableFields = new HashMap<>();
+        List<Field> availableFields = new ArrayList<Field>();
         for(Field field : response.getFields()){
-            availableFields.put(field.getType(), field.getNumber());
+            availableFields.add(field);
         }
         //calculate available field
         for(Booking booking : placedBookings){
-            for(BookField bookField : booking.getBookFields()){
-                String newNumber = String.valueOf(Integer.parseInt(availableFields.get(bookField.getType()))-1);
-                availableFields.put(bookField.getType(),newNumber);
-            }
+            String bookedFieldIndex = booking.getFieldIndex();
+            availableFields.removeIf(element -> bookedFieldIndex.equals(element.getIndex()));
         }
         return availableFields;
     }

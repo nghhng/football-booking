@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import org.example.access.Field;
 import org.example.dao.Booking;
 import org.example.dto.CreateBookingRequest;
 import org.example.dto.GetAvailableFieldsRequest;
@@ -33,7 +34,7 @@ public class BookingController {
     }
 
     @PostMapping("getAvailableFields")
-    public ResponseEntity<Map<String, String>> getAvalableFields(@RequestBody GetAvailableFieldsRequest getAvailableFieldsRequest){
-        return new ResponseEntity<Map<String, String>>(bookingService.getAvailableFieldsByTimeAndDayAndFacility(getAvailableFieldsRequest), HttpStatus.OK);
+    public ResponseEntity<List<Field>> getAvalableFields(@RequestBody GetAvailableFieldsRequest getAvailableFieldsRequest){
+        return new ResponseEntity<List<Field>>(bookingService.getAvailableFieldsByTimeAndDayAndFacility(getAvailableFieldsRequest), HttpStatus.OK);
     }
 }

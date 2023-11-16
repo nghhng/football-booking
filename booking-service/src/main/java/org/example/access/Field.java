@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Field {
 
-    @JsonProperty("number")
-    private String number;
+    @JsonProperty("index")
+    private String index;
 
     @JsonProperty("type")
     private String type;

@@ -25,7 +25,7 @@ public class Booking {
 
     private ObjectId facilityId;
 
-    private List<BookField> bookFields;
+    private String fieldIndex;
 
     private ObjectId priceId;
 

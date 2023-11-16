@@ -9,5 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface BookingRepository extends MongoRepository<Booking, ObjectId> {
     Booking[] findByUserId(ObjectId userId);
 
-    Booking[] findByFacilityIdAndBookFieldsAndAndDateAndPriceIdAndHasOpponent(ObjectId facilityId, BookField bookField, String date, ObjectId priceId, String hasOpponent);
+    Booking[] findByFacilityIdAndFieldIndexAndAndDateAndPriceIdAndHasOpponent(ObjectId facilityId, String fieldIndex, String date, ObjectId priceId, String hasOpponent);
 }

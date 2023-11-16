@@ -17,7 +17,7 @@ public class GetBookingRequest {
 
     private ObjectId facilityId;
 
-    private List<BookField> bookFields;
+    private String fieldIndex;
 
     private ObjectId userId;
     private Time startAt;
