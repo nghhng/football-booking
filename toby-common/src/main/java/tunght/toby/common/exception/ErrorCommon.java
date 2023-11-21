@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum Error {
+public enum ErrorCommon {
     DUPLICATED_USER("Thông tin người dùng đã tồn tại", HttpStatus.UNPROCESSABLE_ENTITY),
     LOGIN_INFO_INVALID("Thông tin đăng nhập không chính xác", HttpStatus.UNPROCESSABLE_ENTITY),
     ALREADY_FOLLOWED_USER("Người dùng này đã được theo dõi", HttpStatus.UNPROCESSABLE_ENTITY),
@@ -14,7 +14,8 @@ public enum Error {
     USER_NOT_FOUND("Người dùng không tồn tại", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND("Role không tồn tại", HttpStatus.NOT_FOUND),
     FOLLOW_NOT_FOUND("Follow không tồn tại", HttpStatus.NOT_FOUND),
-    ARTICLE_NOT_FOUND("Bài viết không tồn tại", HttpStatus.NOT_FOUND),
+    BOOKING_NOT_FOUND("Booking không tồn tại", HttpStatus.NOT_FOUND),
+    MATCHING_REQUEST_NOT_FOUND("Matching Request không tồn tại", HttpStatus.NOT_FOUND),
     FAVORITE_NOT_FOUND("Follow không tồn tại", HttpStatus.NOT_FOUND),
     COMMENT_NOT_FOUND("Bình luận không tồn tại", HttpStatus.NOT_FOUND),
     NUMBER_OF_FIELDS_WRONG("Số lượng sân đăng ký không đúng", HttpStatus.BAD_REQUEST),
@@ -25,7 +26,7 @@ public enum Error {
     private final String message;
     private final HttpStatus status;
 
-    Error(String message, HttpStatus status) {
+    ErrorCommon(String message, HttpStatus status) {
         this.message = message;
         this.status = status;
     }

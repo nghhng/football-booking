@@ -26,7 +26,7 @@ public class AppExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ErrorMessages> handleAppException(AppException exception) {
         log.error("Exception: {}", exception.getMessage());
-        return responseErrorMessages(List.of(exception.getMessage()), exception.getError().getStatus());
+        return responseErrorMessages(List.of(exception.getMessage()), exception.getErrorCommon().getStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

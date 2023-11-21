@@ -22,7 +22,7 @@ import java.util.List;
 @JsonTypeName("user")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class UserDto {
-    private ObjectId id;
+    private String id;
     private String email;
     private String username;
     private String bio;

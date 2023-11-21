@@ -1,4 +1,4 @@
-package org.example.access;
+package org.example.access.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,14 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.example.dao.part.Time;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetPriceRequest {
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty("facilityId")
-    private ObjectId facilityId;
+
+    private String facilityId;
 
     private String fieldType;
 
@@ -26,7 +26,7 @@ public class GetPriceRequest {
 
     private int specialAmount;
 
-    public GetPriceRequest(ObjectId facilityId, String fieldType, Time startAt, Time endAt) {
+    public GetPriceRequest(String facilityId, String fieldType, Time startAt, Time endAt) {
         this.facilityId = facilityId;
         this.fieldType = fieldType;
         this.startAt = startAt;

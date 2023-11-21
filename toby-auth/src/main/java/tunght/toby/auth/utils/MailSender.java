@@ -7,7 +7,7 @@ import tunght.toby.auth.consts.EUserAction;
 import tunght.toby.auth.consts.MailConst;
 import tunght.toby.auth.repository.UserRepository;
 import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.Error;
+import tunght.toby.common.exception.ErrorCommon;
 import tunght.toby.common.utils.DataUtils;
 
 import javax.mail.*;
@@ -60,7 +60,7 @@ public class MailSender {
             Transport.send(message);
 
             if (action == EUserAction.VERIFY_EMAIL) {
-                var user = userRepository.findLatestCreatedAccountByEmail(sendTo).orElseThrow(()-> new AppException(Error.USER_NOT_FOUND));
+                var user = userRepository.findLatestCreatedAccountByEmail(sendTo).orElseThrow(()-> new AppException(ErrorCommon.USER_NOT_FOUND));
                 user.setOtp(otp);
                 userRepository.save(user);
             }

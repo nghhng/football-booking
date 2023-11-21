@@ -1,26 +1,30 @@
 package org.example.controllers;
 
-import org.example.access.Field;
+import org.bson.types.ObjectId;
+import org.example.dao.MatchingRequest;
+import org.example.dao.part.Field;
 import org.example.dao.Booking;
-import org.example.dto.CreateBookingRequest;
-import org.example.dto.GetAvailableFieldsRequest;
-import org.example.dto.GetBookingRequest;
+import org.example.dto.*;
 import org.example.services.BookingService;
+import org.example.services.MatchingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import tunght.toby.common.security.AuthUserDetails;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/booking")
 public class BookingController {
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private MatchingService matchingService;
 
     @LoadBalanced
     @PostMapping("createBooking")
@@ -36,5 +40,15 @@ public class BookingController {
     @PostMapping("getAvailableFields")
     public ResponseEntity<List<Field>> getAvalableFields(@RequestBody GetAvailableFieldsRequest getAvailableFieldsRequest){
         return new ResponseEntity<List<Field>>(bookingService.getAvailableFieldsByTimeAndDayAndFacility(getAvailableFieldsRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("switchStatus")
+    public ResponseEntity<Booking> switchStatus(@RequestBody SwitchStatusRequest request){
+        return new ResponseEntity<Booking>(bookingService.switchStatus(request), HttpStatus.OK);
+    }
+
+    @PostMapping("matchingRequest")
+    public ResponseEntity<MatchingRequest> matchingRequest(@RequestBody MatchingRestRequest request, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+        return new ResponseEntity<MatchingRequest>(matchingService.matchingRequest(request, authUserDetails), HttpStatus.OK);
     }
 }

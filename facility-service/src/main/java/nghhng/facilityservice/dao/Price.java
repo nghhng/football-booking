@@ -21,9 +21,9 @@ public class Price {
 
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId _id;
+    private String id;
 
-    private ObjectId facilityId;
+    private String facilityId;
 
     private String fieldType;
 

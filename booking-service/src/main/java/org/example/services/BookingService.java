@@ -4,21 +4,27 @@ package org.example.services;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.example.access.*;
+import org.example.access.model.GetFacilityByFacilityIdRequest;
+import org.example.access.model.GetFacilityByIdResponse;
+import org.example.access.model.GetPriceRequest;
+import org.example.access.model.GetPriceResponse;
 import org.example.dao.Booking;
-import org.example.dao.part.BookField;
-import org.example.dto.CreateBookingRequest;
-import org.example.dto.GetAvailableFieldsRequest;
-import org.example.dto.GetBookingRequest;
-import org.example.event.CreateBookingEvent;
+import org.example.dao.MatchingRequest;
+import org.example.dao.part.Field;
+import org.example.dao.part.MatchingRequestStatus;
+import org.example.dto.*;
 import org.example.exception.BaseException;
 import org.example.repositories.BookingRepository;
+import org.example.repositories.MatchingRequestRepository;
 import org.example.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import tunght.toby.common.exception.AppException;
+import tunght.toby.common.exception.ErrorCommon;
+import tunght.toby.common.security.AuthUserDetails;
 
 import java.util.*;
 
@@ -28,6 +34,9 @@ public class BookingService {
 
     @Autowired
     BookingRepository bookingRepository;
+
+    @Autowired
+    MatchingRequestRepository matchingRequestRepository;
 
     @Autowired
     FacilityFeignClient facilityFeignClient;
@@ -72,7 +81,7 @@ public class BookingService {
         }
 
 
-        ObjectId priceId = getPriceResponses.get(0).get_id();
+        String priceId = getPriceResponses.get(0).getId();
         //select Field
         //now set Field index random
 //        List<BookField> bookFields = new ArrayList<BookField>();
@@ -91,7 +100,7 @@ public class BookingService {
                 .price(price)
                 .startAt(createBookingRequest.getStartAt())
                 .endAt(createBookingRequest.getEndAt())
-                .hasOpponent(createBookingRequest.getHasOpponent())
+                .hasOpponent(false)
                 .fieldIndex(createBookingRequest.getFieldIndex())
                 .build();
 
@@ -150,5 +159,27 @@ public class BookingService {
             availableFields.removeIf(element -> bookedFieldIndex.equals(element.getIndex()));
         }
         return availableFields;
+    }
+
+    public Booking switchStatus(SwitchStatusRequest request ){
+        Booking booking = bookingRepository.findById(request.getBookingId());
+        if (booking == null) {
+            throw new AppException(ErrorCommon.BOOKING_NOT_FOUND);
+        }
+        booking.setHasOpponent(!booking.isHasOpponent());
+        booking = bookingRepository.save(booking);
+//        kafkaTemplate.send("notification-topic", new CreateBookingEvent(bookingSaved.get_id().toString()));
+        return booking;
+    }
+
+    public MatchingRequest matchingRequest(MatchingRestRequest request, AuthUserDetails authUserDetails){
+        String requestorId = authUserDetails.getId();
+        MatchingRequest matchingRequest = MatchingRequest.builder()
+                .bookingId(request.getBookingId())
+                .requestorId(requestorId)
+                .status(MatchingRequestStatus.PENDING)
+                .build();
+        MatchingRequest matchingRequestSaved = matchingRequestRepository.save(matchingRequest);
+        return matchingRequestSaved;
     }
 }

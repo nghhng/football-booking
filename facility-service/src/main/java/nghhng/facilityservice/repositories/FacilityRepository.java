@@ -5,7 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface FacilityRepository extends MongoRepository<Facility, ObjectId> {
-    Facility[] findByOwnerId(ObjectId ownerId);
+    Facility[] findByOwnerId(String ownerId);
 
-    Facility findBy_id(ObjectId facilityId);
+    Facility findById(String facilityId);
 }

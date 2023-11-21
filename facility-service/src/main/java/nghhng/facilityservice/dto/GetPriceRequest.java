@@ -15,7 +15,8 @@ import org.bson.types.ObjectId;
 public class GetPriceRequest {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty("facilityId")
-    private ObjectId facilityId;
+
+    private String facilityId;
 
     private String fieldType;
 

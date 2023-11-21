@@ -1,20 +1,19 @@
-package nghhng.facilityservice.dto;
+package org.example.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.bson.types.ObjectId;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+public class MatchingRestRequest {
+    @JsonSerialize(using = ToStringSerializer.class)
 
-public class GetFacilityByFacilityIdRequest {
-    private String facilityId;
+    private String bookingId;
 }

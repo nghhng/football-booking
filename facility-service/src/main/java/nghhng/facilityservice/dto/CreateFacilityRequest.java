@@ -21,12 +21,11 @@ public class CreateFacilityRequest {
     @NonNull
     private Address address;
 
+    @NonNull
     private String numOfFields;
 
-    private ObjectId ownerId;
-
     @NonNull
-    private String username;
+    private String ownerId;
 
     @NonNull
     @JsonProperty("fields")

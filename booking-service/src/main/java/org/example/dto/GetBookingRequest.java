@@ -3,23 +3,19 @@ package org.example.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 import org.bson.types.ObjectId;
-import org.example.access.Time;
-import org.example.dao.part.BookField;
-
-import java.util.List;
+import org.example.dao.part.Time;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class GetBookingRequest {
 
-    private ObjectId facilityId;
+    private String facilityId;
 
     private String fieldIndex;
 
-    private ObjectId userId;
+    private String userId;
     private Time startAt;
     private Time endAt;
 

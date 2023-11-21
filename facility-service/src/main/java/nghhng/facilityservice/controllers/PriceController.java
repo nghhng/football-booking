@@ -20,8 +20,8 @@ public class PriceController {
     private PriceService priceService;
 
     @PostMapping("createPrice")
-    public ResponseEntity<ObjectId> createFacility(@RequestBody CreatePriceRequest createPriceRequest){
-        return new ResponseEntity<ObjectId>(priceService.createPrice(createPriceRequest), HttpStatus.OK);
+    public ResponseEntity<String> createFacility(@RequestBody CreatePriceRequest createPriceRequest){
+        return new ResponseEntity<>(priceService.createPrice(createPriceRequest), HttpStatus.OK);
     }
 
     @PostMapping("getPrice")

@@ -23,7 +23,7 @@ public class PriceService {
     MongoTemplate mongoTem;
 
 
-    public ObjectId createPrice(CreatePriceRequest createPriceRequest){
+    public String createPrice(CreatePriceRequest createPriceRequest){
         Price price = Price.builder()
                 .facilityId(createPriceRequest.getFacilityId())
                 .fieldType(createPriceRequest.getFieldType())
@@ -36,11 +36,11 @@ public class PriceService {
         if(priceSaved==null){
             throw new BaseException("Create Price failed");
         }
-        else return priceSaved.get_id();
+        else return priceSaved.getId();
     }
 
     public List<Price> getPrice(GetPriceRequest getPriceRequest){
-        if(getPriceRequest.getFieldType().equals("0")){
+        if(getPriceRequest.getFieldType()!=null && getPriceRequest.getFieldType().equals("0")){
             List<Price> prices = priceRepository.findAll();
             return prices;
         }

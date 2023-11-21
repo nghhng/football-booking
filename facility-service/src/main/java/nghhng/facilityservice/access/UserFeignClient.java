@@ -9,4 +9,7 @@ public interface UserFeignClient {
 
     @PostMapping("getByUsername")
     GetUserResponse getUserByUsername(@RequestBody GetUserByUsernameRequest getUserByUsernameRequest);
+
+    @PostMapping("getById")
+    GetUserResponse getUserById(@RequestBody GetUserByIdRequest getUserByIdRequest);
 }

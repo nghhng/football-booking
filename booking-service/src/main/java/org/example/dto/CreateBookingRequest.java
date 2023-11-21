@@ -5,21 +5,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
-import org.example.access.Time;
+import org.example.dao.part.Time;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class CreateBookingRequest {
     @NonNull
-    private ObjectId facilityId;
+    private String facilityId;
 
     @NonNull
     private String fieldIndex;
 
 
     @NonNull
-    private ObjectId userId;
+    private String userId;
 
     @NonNull
     private Time startAt;
@@ -30,8 +30,6 @@ public class CreateBookingRequest {
     @NonNull
     private String date;
 
-    @NonNull
-    private String hasOpponent;
 
 
 }

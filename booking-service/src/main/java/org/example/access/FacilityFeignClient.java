@@ -1,5 +1,9 @@
 package org.example.access;
 
+import org.example.access.model.GetFacilityByFacilityIdRequest;
+import org.example.access.model.GetFacilityByIdResponse;
+import org.example.access.model.GetPriceRequest;
+import org.example.access.model.GetPriceResponse;
 import tunght.toby.common.config.FeignClientInterceptorConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

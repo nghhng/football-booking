@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.example.access.Time;
-import org.example.dao.part.BookField;
+import org.example.dao.part.Time;
 
-import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class GetAvailableFieldsRequest {
-    private ObjectId facilityId;
+    private String facilityId;
     private Time startAt;
     private Time endAt;
 

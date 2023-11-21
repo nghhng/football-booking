@@ -1,16 +1,19 @@
 package org.example.dao;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.example.access.Time;
-import org.example.dao.part.BookField;
+import org.example.dao.part.Time;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.List;
 
+@Document(collection = "booking")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,16 +21,16 @@ import java.util.List;
 
 public class Booking {
 
+    @Id
+    private String id;
 
-    private ObjectId _id;
+    private String userId;
 
-    private ObjectId userId;
-
-    private ObjectId facilityId;
+    private String facilityId;
 
     private String fieldIndex;
 
-    private ObjectId priceId;
+    private String priceId;
 
     private Time startAt;
 
@@ -38,7 +41,9 @@ public class Booking {
     @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
     private String date;
 
-    private String hasOpponent;
+    private boolean hasOpponent;
+
+    private String opponentId;
 
 }
 

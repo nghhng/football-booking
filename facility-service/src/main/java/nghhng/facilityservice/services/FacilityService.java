@@ -1,24 +1,20 @@
 package nghhng.facilityservice.services;
 
 
+import nghhng.facilityservice.access.GetUserByIdRequest;
 import nghhng.facilityservice.access.GetUserByUsernameRequest;
 import nghhng.facilityservice.access.GetUserResponse;
 import nghhng.facilityservice.access.UserFeignClient;
 import nghhng.facilityservice.dao.Facility;
-import nghhng.facilityservice.dao.Price;
 import nghhng.facilityservice.dto.CreateFacilityRequest;
-import nghhng.facilityservice.dto.CreatePriceRequest;
 import nghhng.facilityservice.dto.GetFacilityByFacilityIdRequest;
 import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
 import nghhng.facilityservice.exception.BaseException;
 import nghhng.facilityservice.repositories.FacilityRepository;
-import nghhng.facilityservice.repositories.PriceRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.Error;
+import tunght.toby.common.exception.ErrorCommon;
 
 import java.util.List;
 
@@ -40,12 +36,12 @@ public class FacilityService {
 
     public Facility createFacility (CreateFacilityRequest createFacilityRequest) {
 
-        GetUserByUsernameRequest getUserByUsernameRequest = new GetUserByUsernameRequest(createFacilityRequest.getUsername());
+        GetUserByIdRequest getUserByIdRequest = new GetUserByIdRequest(createFacilityRequest.getOwnerId());
 
-        GetUserResponse user = userFeignClient.getUserByUsername(getUserByUsernameRequest);
+        GetUserResponse user = userFeignClient.getUserById(getUserByIdRequest);
 
         if(Integer.parseInt(createFacilityRequest.getNumOfFields())!=createFacilityRequest.getFields().size()){
-            throw new AppException(Error.NUMBER_OF_FIELDS_WRONG);
+            throw new AppException(ErrorCommon.NUMBER_OF_FIELDS_WRONG);
         }
         if(user==null){
             throw new BaseException("User not exist");
@@ -54,7 +50,7 @@ public class FacilityService {
                         .name(createFacilityRequest.getName())
                         .address(createFacilityRequest.getAddress())
                         .numOfFields(createFacilityRequest.getNumOfFields())
-                .ownerId(user.get_id())
+                .ownerId(user.getId())
 //                .fields(createFacilityRequest.getFields())
                 .build();
         facility.setFields(createFacilityRequest.getFields());
@@ -74,12 +70,12 @@ public class FacilityService {
         if(user==null){
             throw new BaseException("User not exist");
         }
-        Facility[] facility = facilityRepository.findByOwnerId(user.get_id());
+        Facility[] facility = facilityRepository.findByOwnerId(user.getId());
         return facility;
     }
     public Facility getFacilityByFacilityId(GetFacilityByFacilityIdRequest request){
 
-        Facility facility = facilityRepository.findBy_id(request.getFacilityId());
+        Facility facility = facilityRepository.findById(request.getFacilityId());
         return facility;
     }
 

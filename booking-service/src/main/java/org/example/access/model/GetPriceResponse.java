@@ -1,4 +1,4 @@
-package org.example.access;
+package org.example.access.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -7,8 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.example.dao.part.Time;
 
 
 @Data
@@ -17,10 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class GetPriceResponse {
 
-    @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId _id;
+    private String id;
 
-    private ObjectId facilityId;
+    private String facilityId;
 
     private String fieldType;
 

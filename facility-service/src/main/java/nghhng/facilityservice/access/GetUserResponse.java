@@ -17,8 +17,8 @@ import org.springframework.data.annotation.Id;
 public class GetUserResponse {
 
 
-    @JsonProperty("_id")
-    private ObjectId _id;
+    @JsonProperty("id")
+    private String id;
 
     private String name;
 

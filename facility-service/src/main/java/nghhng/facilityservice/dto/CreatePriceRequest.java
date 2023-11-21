@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 public class CreatePriceRequest {
 
     @NonNull
-    private ObjectId facilityId;
+    private String facilityId;
 
     @NonNull
     private String fieldType;

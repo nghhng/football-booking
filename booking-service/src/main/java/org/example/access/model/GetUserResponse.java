@@ -1,4 +1,4 @@
-package org.example.access;
+package org.example.access.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

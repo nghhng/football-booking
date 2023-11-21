@@ -1,4 +1,4 @@
-package org.example.access;
+package org.example.access.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

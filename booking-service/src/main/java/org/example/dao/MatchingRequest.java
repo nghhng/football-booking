@@ -1,4 +1,4 @@
-package nghhng.footballbooking.dao;
+package org.example.dao;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -7,36 +7,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.example.dao.part.MatchingRequestStatus;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDAO {
-
+@Document(collection = "matchingRequest")
+public class MatchingRequest {
     @Id
     private String id;
 
-    private String name;
+    private String bookingId;
 
-    private String age;
+    private String requestorId;
 
-    private String gender;
-
-    private String phone;
-
-    private String email;
-
-    @Indexed(unique=true)
-    private String username;
-
-    private String password;
-
-    private String birthDate;
+    private MatchingRequestStatus status;
 }
-
-

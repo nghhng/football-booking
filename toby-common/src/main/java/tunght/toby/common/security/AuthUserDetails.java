@@ -13,18 +13,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AuthUserDetails implements UserDetails {
-    private final ObjectId id;
+    private final String id;
     private final String email;
     private final Set<ERole> authorities;
 
     @Builder
-    public AuthUserDetails(ObjectId id, String email, Set<ERole> authorities) {
+    public AuthUserDetails(String id, String email, Set<ERole> authorities) {
         this.id = id;
         this.email = email;
         this.authorities = authorities;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 

@@ -10,21 +10,19 @@ import tunght.toby.auth.consts.CommonConst;
 import tunght.toby.auth.consts.EUserAction;
 import tunght.toby.auth.dto.UserDto;
 //import tunght.toby.auth.repository.RoleRepository;
-import tunght.toby.auth.repository.RoleRepository;
 import tunght.toby.auth.repository.UserRepository;
 import tunght.toby.auth.utils.MailSender;
 import tunght.toby.common.entity.UserEntity;
 import tunght.toby.common.enums.ERole;
 import tunght.toby.common.enums.EStatus;
 import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.Error;
+import tunght.toby.common.exception.ErrorCommon;
 import tunght.toby.common.security.AuthUserDetails;
 import tunght.toby.common.security.JwtUtils;
 import tunght.toby.common.utils.JsonConverter;
 
 import java.time.Duration;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 import static tunght.toby.common.enums.ERole.ROLE_OWNER;
 import static tunght.toby.common.enums.ERole.ROLE_USER;
@@ -43,10 +41,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto.RegistrationResponse registration(UserDto.Registration registration) {
         // maybe there are several accounts with the same email, but only 1 account is activated
-        userRepository.findAllByEmailAndStatus(registration.getEmail(), EStatus.ACTIVE).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
+        userRepository.findAllByEmailAndStatus(registration.getEmail(), EStatus.ACTIVE).stream().findAny().ifPresent(entity -> {throw new AppException(ErrorCommon.DUPLICATED_USER);});
 
         // maybe there are several accounts with the same username, but only 1 account is activated
-        userRepository.findAllByUsernameAndStatus(registration.getUsername(), EStatus.ACTIVE).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
+        userRepository.findAllByUsernameAndStatus(registration.getUsername(), EStatus.ACTIVE).stream().findAny().ifPresent(entity -> {throw new AppException(ErrorCommon.DUPLICATED_USER);});
 
 //Tạm thời chưa sử dụng RoleRepository
         UserEntity userEntity = UserEntity.builder()
@@ -64,7 +62,7 @@ public class UserServiceImpl implements UserService {
             userEntity.getRoles().add(ROLE_USER);
         } else if(ERole.isRoleOwner(registration.getRole())){
             userEntity.getRoles().add(ROLE_OWNER);
-        } else throw new AppException(Error.ROLE_NOT_FOUND);
+        } else throw new AppException(ErrorCommon.ROLE_NOT_FOUND);
         userEntity = userRepository.save(userEntity);
         mailSender.sendMail(userEntity.getEmail(), EUserAction.VERIFY_EMAIL);
         return UserDto.RegistrationResponse.builder().email(userEntity.getEmail()).build();
@@ -77,7 +75,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .filter(user -> passwordEncoder.matches(login.getPassword(), user.getPassword()))
                 .findFirst()
-                .orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
+                .orElseThrow(() -> new AppException(ErrorCommon.LOGIN_INFO_INVALID));
         String jwt = jwtUtils.encode(userEntity.getEmail());
         var userDetail = AuthUserDetails.builder()
                 .id(userEntity.getId())
@@ -105,20 +103,20 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public UserDto currentUser(AuthUserDetails authUserDetails) {
-        UserEntity userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        UserEntity userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(ErrorCommon.USER_NOT_FOUND));
         return convertEntityToDto(userEntity);
     }
 
     @Override
     public UserDto update(UserDto.Update update, AuthUserDetails authUserDetails) {
-        UserEntity userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        UserEntity userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(ErrorCommon.USER_NOT_FOUND));
 
         if (update.getUsername() != null) {
             userRepository.findAllByUsernameAndStatus(update.getUsername(), EStatus.ACTIVE)
                     .stream()
                     .filter(found -> !found.getId().equals(userEntity.getId()))
                     .findFirst()
-                    .ifPresent(found -> {throw new AppException(Error.DUPLICATED_USER);});
+                    .ifPresent(found -> {throw new AppException(ErrorCommon.DUPLICATED_USER);});
             userEntity.setUsername(update.getUsername());
         }
 
@@ -138,11 +136,11 @@ public class UserServiceImpl implements UserService {
     public String requestVerify(EUserAction action, UserDto.RequestOTP requestOTP) {
         // maybe there are several accounts with the same email, but only the latest account will be activated
         var user = userRepository.findLatestCreatedAccountByEmail(requestOTP.getEmail())
-                .orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCommon.USER_NOT_FOUND));
         var otp = user.getOtp();
         // if otp is null -> exception is caught -> Error 422
         if (!otp.equals(requestOTP.getOtp())) {
-            throw new AppException(Error.OTP_INVALID);
+            throw new AppException(ErrorCommon.OTP_INVALID);
         } else {
             if (action.equals(EUserAction.VERIFY_EMAIL)) {
                 user.setStatus(EStatus.ACTIVE);
@@ -158,7 +156,7 @@ public class UserServiceImpl implements UserService {
     public void sendOTP(EUserAction action, String email) {
         var users = userRepository.findAllByEmail(email);
         if (users.isEmpty()) {
-            throw new AppException(Error.USER_NOT_FOUND);
+            throw new AppException(ErrorCommon.USER_NOT_FOUND);
         }
         mailSender.sendMail(email, action);
     }

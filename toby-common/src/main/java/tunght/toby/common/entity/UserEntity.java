@@ -25,7 +25,7 @@ public class UserEntity {
 
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId id;
+    private String id;
 
     private String name;
 

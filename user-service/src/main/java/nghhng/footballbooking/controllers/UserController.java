@@ -3,6 +3,7 @@ package nghhng.footballbooking.controllers;
 
 import nghhng.footballbooking.dao.UserDAO;
 import nghhng.footballbooking.dto.CreateUserRequest;
+import nghhng.footballbooking.dto.GetUserByIdRequest;
 import nghhng.footballbooking.dto.GetUserByUsernameRequest;
 import nghhng.footballbooking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class UserController {
         return new ResponseEntity<UserDAO>(userService.getUserByUsername(getUserByUsernameRequest.getUsername()), HttpStatus.OK);
     }
 
-    @GetMapping("current")
-    public ResponseEntity<UserDAO> currentUser(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
-        return new ResponseEntity<UserDAO>(userService.currentUser(authUserDetails),HttpStatus.OK);
+    @PostMapping("getById")
+    public ResponseEntity<UserDAO> getById(@RequestBody GetUserByIdRequest getUserByIdRequest) {
+        return new ResponseEntity<UserDAO>(userService.getById(getUserByIdRequest.getId()), HttpStatus.OK);
     }
 }
