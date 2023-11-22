@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import tunght.toby.common.exception.AppException;
 import tunght.toby.common.exception.ErrorCommon;
@@ -49,7 +50,7 @@ public class BookingService {
 
 
 
-    public Booking createBooking(CreateBookingRequest createBookingRequest){
+    public Booking createBooking(CreateBookingRequest createBookingRequest, AuthUserDetails authUserDetails ){
 
         GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(createBookingRequest.getFacilityId());
         //check Facility and maximum number of fields
@@ -65,8 +66,16 @@ public class BookingService {
 //            }
 //        }
         //get Type of selected field
-        Field selectedField = response.getFields().get(Integer.parseInt(createBookingRequest.getFieldIndex()));
-        String bookingType = selectedField.getType();
+        String bookingType = new String();
+        Optional<Field> selectedField = response.getFields().stream()
+                .filter(field -> createBookingRequest.getFieldIndex().equals(field.getIndex()))
+                .findFirst();
+        if(selectedField.isPresent()){
+            bookingType = selectedField.get().getType();
+        } else {
+            throw new BaseException("Can not find the field with given index");
+        }
+
 
         //get Price
         GetPriceRequest getPriceRequest = new GetPriceRequest(createBookingRequest.getFacilityId(),bookingType , createBookingRequest.getStartAt(), createBookingRequest.getEndAt());
@@ -94,7 +103,7 @@ public class BookingService {
 
         Booking booking = Booking.builder()
                 .facilityId(createBookingRequest.getFacilityId())
-                .userId(createBookingRequest.getUserId())
+                .userId(authUserDetails.getId())
                 .date(createBookingRequest.getDate())
                 .priceId(priceId)
                 .price(price)

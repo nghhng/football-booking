@@ -14,8 +14,7 @@ import org.bson.types.ObjectId;
 public class GetUserResponse {
 
 
-    @JsonProperty("_id")
-    private ObjectId _id;
+    private String id;
 
     private String name;
 

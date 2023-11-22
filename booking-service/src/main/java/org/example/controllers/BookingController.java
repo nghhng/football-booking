@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.bson.types.ObjectId;
 import org.example.dao.MatchingRequest;
 import org.example.dao.part.Field;
@@ -26,10 +27,10 @@ public class BookingController {
     @Autowired
     private MatchingService matchingService;
 
-    @LoadBalanced
+    @Operation(summary = "Api create booking")
     @PostMapping("createBooking")
-    public ResponseEntity<Booking> createBooking(@RequestBody CreateBookingRequest createBookingRequest){
-        return new ResponseEntity<Booking>(bookingService.createBooking(createBookingRequest), HttpStatus.OK);
+    public ResponseEntity<Booking> createBooking(@RequestBody CreateBookingRequest createBookingRequest, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+        return new ResponseEntity<Booking>(bookingService.createBooking(createBookingRequest, authUserDetails), HttpStatus.OK);
     }
 
     @PostMapping("getBooking")

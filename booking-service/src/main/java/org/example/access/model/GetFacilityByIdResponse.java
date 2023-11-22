@@ -23,7 +23,7 @@ public class GetFacilityByIdResponse {
 
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId _id;
+    private String id;
 
     @JsonProperty(required = true)
     private String name;
@@ -31,7 +31,7 @@ public class GetFacilityByIdResponse {
     @JsonProperty(required = true)
     private String numOfFields;
 
-    private ObjectId ownerId;
+    private String ownerId;
 
     private List<Field> fields;
 }

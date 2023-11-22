@@ -1,5 +1,6 @@
 package tunght.toby.common.security;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,9 +13,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@Schema(hidden = true)
 public class AuthUserDetails implements UserDetails {
+    @Schema(hidden = true)
     private final String id;
+    @Schema(hidden = true)
     private final String email;
+    @Schema(hidden = true)
     private final Set<ERole> authorities;
 
     @Builder
