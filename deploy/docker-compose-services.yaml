@@ -1,0 +1,54 @@
+version: "3"
+services:
+  user-service:
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    ports:
+      - "7100:7100"
+    restart: always
+    networks:
+      - football-booking
+
+  facility-service:
+    build:
+      context: ../facility-service
+      dockerfile: Dockerfile
+    ports:
+      - "7200:7200"
+    restart: always
+    networks:
+      - football-booking
+
+  booking-service:
+    build:
+      context: ../booking-service
+      dockerfile: Dockerfile
+    ports:
+      - "7300:7300"
+    restart: always
+    networks:
+      - football-booking
+
+  discovery-service:
+    build:
+      context: ../discovery-server
+      dockerfile: Dockerfile
+    ports:
+      - "7654:7654"
+    restart: always
+    networks:
+      - football-booking
+
+  auth-service:
+    build:
+      context: ../toby-auth
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    restart: always
+    networks:
+      - football-booking
+
+networks:
+  football-booking:
