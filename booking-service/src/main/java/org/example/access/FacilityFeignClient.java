@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "FACILITY-SERVICE", url = "localhost:7200", configuration = FeignClientInterceptorConfig.class)
+@FeignClient(name = "FACILITY-SERVICE", url = "${facility.service.url}", configuration = FeignClientInterceptorConfig.class)
 public interface FacilityFeignClient {
     @PostMapping("facility/getByFacilityId")
     GetFacilityByIdResponse getFacilityById(@RequestBody GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest);
