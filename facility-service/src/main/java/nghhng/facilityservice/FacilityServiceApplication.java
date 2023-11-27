@@ -11,7 +11,6 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 @SpringBootApplication(scanBasePackages = {"nghhng.facilityservice", "tunght.toby.common"}, exclude = {DataSourceAutoConfiguration.class})
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @EnableFeignClients
-@EnableDiscoveryClient
 
 public class FacilityServiceApplication {
 
