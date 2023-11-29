@@ -1,5 +1,6 @@
 package org.example.access;
 
+import org.example.access.model.GetUserByIdRequest;
 import org.example.access.model.GetUserByUsernameRequest;
 import org.example.access.model.GetUserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,4 +12,7 @@ public interface UserFeignClient {
 
     @PostMapping("getByUsername")
     GetUserResponse getUserByUsername(@RequestBody GetUserByUsernameRequest getUserByUsernameRequest);
+
+    @PostMapping("getById")
+    GetUserResponse getUserById(@RequestBody GetUserByIdRequest getUserByIdRequest);
 }

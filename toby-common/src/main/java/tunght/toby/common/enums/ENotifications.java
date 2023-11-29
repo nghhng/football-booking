@@ -2,9 +2,12 @@ package tunght.toby.common.enums;
 
 public enum ENotifications {
 //    param_1 là username
-    FOLLOW("%s đã theo dõi bạn."),
-    LIKE_POST("%s đã thích một bài viết của bạn."),
-    COMMENT("%s đã bình luận vào một bài viết của bạn.");
+    BOOKING("%s đã đặt sân."),
+    REQUEST("%s đã đề nghị trở thành đối thủ của bạn."),
+    ACCEPT("%s đã chấp nhận lời mời trở thành đối thủ của bạn."),
+
+    DENY("%s đã từ chối lời mời trở thành đối thủ của bạn.");
+
 
     public final String notificationTemplate;
 

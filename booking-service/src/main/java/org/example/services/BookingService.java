@@ -2,12 +2,10 @@ package org.example.services;
 
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.example.access.*;
-import org.example.access.model.GetFacilityByFacilityIdRequest;
-import org.example.access.model.GetFacilityByIdResponse;
-import org.example.access.model.GetPriceRequest;
-import org.example.access.model.GetPriceResponse;
+import org.example.access.model.*;
 import org.example.dao.Booking;
 import org.example.dao.MatchingRequest;
 import org.example.dao.part.Field;
@@ -18,20 +16,27 @@ import org.example.repositories.BookingRepository;
 import org.example.repositories.MatchingRequestRepository;
 import org.example.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import tunght.toby.common.enums.ENotifications;
 import tunght.toby.common.exception.AppException;
 import tunght.toby.common.exception.ErrorCommon;
 import tunght.toby.common.security.AuthUserDetails;
+import tunght.toby.common.utils.JsonConverter;
 
 import java.util.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookingService {
+
+    @Value(value = "${kafka.booking-noti-topic}")
+    private String bookingNotiTopic;
 
     @Autowired
     BookingRepository bookingRepository;
@@ -43,9 +48,12 @@ public class BookingService {
     FacilityFeignClient facilityFeignClient;
 
     @Autowired
+    UserFeignClient userFeignClient;
+
+    @Autowired
     MongoTemplate mongoTemplate;
 
-//    private final KafkaTemplate<String, CreateBookingEvent> kafkaTemplate;
+    private final KafkaTemplate<String, Object> notiKafkaTemplate;
 
 
 
@@ -54,8 +62,8 @@ public class BookingService {
 
         GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(createBookingRequest.getFacilityId());
         //check Facility and maximum number of fields
-        GetFacilityByIdResponse response = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
-        if(response==null){
+        GetFacilityByIdResponse bookedFacility = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
+        if(bookedFacility==null){
             throw new BaseException("Facility not exists");
         }
 //        for(Field field : response.getFields()){
@@ -67,7 +75,7 @@ public class BookingService {
 //        }
         //get Type of selected field
         String bookingType = new String();
-        Optional<Field> selectedField = response.getFields().stream()
+        Optional<Field> selectedField = bookedFacility.getFields().stream()
                 .filter(field -> createBookingRequest.getFieldIndex().equals(field.getIndex()))
                 .findFirst();
         if(selectedField.isPresent()){
@@ -113,9 +121,22 @@ public class BookingService {
                 .fieldIndex(createBookingRequest.getFieldIndex())
                 .build();
 
-        Booking bookingSaved = bookingRepository.save(booking);
-//        kafkaTemplate.send("notification-topic", new CreateBookingEvent(bookingSaved.get_id().toString()));
-        return  bookingSaved;
+        booking = bookingRepository.save(booking);
+
+        GetUserResponse user = userFeignClient.getUserById(new GetUserByIdRequest(booking.getUserId()));
+
+
+        NotificationDto notificationDto = NotificationDto.builder()
+                .type(ENotifications.BOOKING)
+                .fromUserId(authUserDetails.getId())
+                .toUserId(bookedFacility.getOwnerId())
+                .bookingId(booking.getId())
+                .message(ENotifications.getNotificationMessage(ENotifications.BOOKING, user.getUsername()))
+                .isRead(false)
+                .build();
+
+        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
+        return  booking;
     }
 
     public List<Booking> getBooking(GetBookingRequest getBookingRequest){

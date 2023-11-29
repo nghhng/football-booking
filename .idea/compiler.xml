@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="facility-service" />
         <module name="api-gateway" />
+        <module name="toby-auth" />
         <module name="user-service" />
         <module name="discovery-server" />
         <module name="booking-service" />
@@ -21,17 +22,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" />
         </processorPath>
         <module name="toby-common" />
-      </profile>
-      <profile name="Annotation profile for toby-auth" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.4.2.Final/mapstruct-processor-1.4.2.Final.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.4.2.Final/mapstruct-1.4.2.Final.jar" />
-        </processorPath>
-        <module name="toby-auth" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

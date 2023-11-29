@@ -24,7 +24,7 @@ public class SwaggerConfig {
                                 .bearerFormat("JWT")))
                 .info(new Info()
                         .version("1.0")
-                        .title("Toby.me")
-                        .description("API docs for Toby.me"));
+                        .title("Football Booking")
+                        .description("API docs for Football Booking"));
     }
 }
