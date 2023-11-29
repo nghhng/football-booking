@@ -120,12 +120,20 @@ public class UserServiceImpl implements UserService {
             userEntity.setUsername(update.getUsername());
         }
 
-        if (update.getBio() != null) {
-//            userEntity.setBio(update.getBio());
-        }
+//        if (update.getBio() != null) {
+////            userEntity.setBio(update.getBio());
+//        }
 
         if (update.getImage() != null) {
             userEntity.setImage(update.getImage());
+        }
+
+        if (update.getGender() != null) {
+            userEntity.setGender(update.getGender());
+        }
+
+        if (update.getAge() != null) {
+            userEntity.setAge(update.getAge());
         }
 
         userRepository.save(userEntity);

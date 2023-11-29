@@ -10,11 +10,14 @@ import lombok.Getter;
 import org.bson.types.ObjectId;
 import tunght.toby.common.enums.ERole;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -25,9 +28,14 @@ public class UserDto {
     private String id;
     private String email;
     private String username;
-    private String bio;
+//    private String bio;
     private String image;
-    private List<String> roles;
+    @Enumerated(EnumType.STRING)
+    private Set<ERole> roles;
+    private String phone;
+    private String age;
+    private String gender;
+
 
     @Getter
     @AllArgsConstructor
@@ -79,15 +87,14 @@ public class UserDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    @JsonTypeName("user")
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+//    @JsonTypeName("user")
+//    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
     public static class Update {
-        private Long id;
         private String email;
-        @NotBlank(message = "Tên hiển thị không được để trống")
-        @Pattern(regexp = "[\\w\\d]{1,30}", message = "Tên hiển thị chỉ được bao gồm chữ cái, kí tự số hoặc gạch dưới, ít nhất 1 kí tự số")
         private String username;
-        private String bio;
+        private String phone;
+        private String age;
+        private String gender;
         private String image;
     }
 
