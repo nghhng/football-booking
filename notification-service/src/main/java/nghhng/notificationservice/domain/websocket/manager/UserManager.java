@@ -1,0 +1,47 @@
+package nghhng.notificationservice.domain.websocket.manager;
+
+import lombok.extern.slf4j.Slf4j;
+import nghhng.notificationservice.domain.websocket.network.IClientConnection;
+import nghhng.notificationservice.domain.websocket.network.IUser;
+import nghhng.notificationservice.domain.websocket.network.User;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Slf4j
+public class UserManager {
+
+    private static final Map<String, IUser> USERS = new ConcurrentHashMap<>();
+
+    public static IUser getUser(String userId) {
+        return USERS.get(userId);
+    }
+
+    public static void addUser(IUser user) {
+        USERS.put(user.getUserId(), user);
+    }
+
+    public static void removeUser(String userId) {
+        USERS.remove(userId);
+    }
+
+    public static Collection<IUser> getAllUser() {
+        return USERS.values();
+    }
+
+    public static void manageUserOnline(String userId, String sessionId, IClientConnection connection) {
+        IUser user = getUser(userId);
+        if (user == null) {
+            user = new User(userId);
+            addUser(user);
+            log.info("User with id {} is online", userId);
+        }
+
+        connection.setUser(user);
+        // moi ket noi se co  1 session id rieng
+        connection.setSessionId(sessionId);
+
+        user.addConnection(connection);
+    }
+}

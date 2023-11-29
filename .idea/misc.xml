@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/toby-common/pom.xml" />
         <option value="$PROJECT_DIR$/toby-parent/pom.xml" />
         <option value="$PROJECT_DIR$/toby-auth/pom.xml" />
+        <option value="$PROJECT_DIR$/notification-service/pom.xml" />
       </list>
     </option>
   </component>

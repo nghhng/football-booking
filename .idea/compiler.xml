@@ -8,11 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="facility-service" />
+        <module name="discovery-server" />
+        <module name="booking-service" />
         <module name="api-gateway" />
         <module name="toby-auth" />
         <module name="user-service" />
-        <module name="discovery-server" />
-        <module name="booking-service" />
+        <module name="notification-service" />
       </profile>
       <profile name="Annotation profile for toby-common" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -27,6 +28,7 @@
     <bytecodeTargetLevel>
       <module name="facility.service" target="17" />
       <module name="service" target="17" />
+      <module name="toby-notification" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -36,9 +38,11 @@
       <module name="discovery-server" options="-parameters" />
       <module name="facility-service" options="-parameters" />
       <module name="facility.service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="service" options="-parameters" />
       <module name="toby-auth" options="-parameters" />
       <module name="toby-common" options="-parameters" />
+      <module name="toby-notification" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>
