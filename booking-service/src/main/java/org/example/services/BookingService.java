@@ -151,6 +151,11 @@ public class BookingService {
                     continue;
                 }
                 else {
+                    if(field.getName().equals("limit")){
+                        query.limit(getBookingRequest.getLimit());
+                    } else if(field.getName().equals("skip")){
+                        query.skip(getBookingRequest.getSkip());
+                    }
                     criteria.and(field.getName()).is(value);
                 }
             } catch (IllegalAccessException e) {

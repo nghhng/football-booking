@@ -21,4 +21,7 @@ public class GetBookingRequest {
 
     private String date;
     private String hasOpponent;
+
+    private Integer limit;
+    private Integer skip;
 }
