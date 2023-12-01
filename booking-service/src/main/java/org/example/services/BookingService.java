@@ -155,7 +155,7 @@ public class BookingService {
                         query.limit(getBookingRequest.getLimit());
                     } else if(field.getName().equals("skip")){
                         query.skip(getBookingRequest.getSkip());
-                    }
+                    } else
                     criteria.and(field.getName()).is(value);
                 }
             } catch (IllegalAccessException e) {

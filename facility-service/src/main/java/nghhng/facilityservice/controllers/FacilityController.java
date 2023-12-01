@@ -3,6 +3,7 @@ package nghhng.facilityservice.controllers;
 
 import nghhng.facilityservice.dto.GetFacilityByFacilityIdRequest;
 import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
+import nghhng.facilityservice.dto.GetFacilityRequest;
 import nghhng.facilityservice.services.FacilityService;
 import nghhng.facilityservice.dao.Facility;
 import nghhng.facilityservice.dto.CreateFacilityRequest;
@@ -24,6 +25,11 @@ public class FacilityController {
         return new ResponseEntity<List<Facility>>(facilityService.getAllFacilities(), HttpStatus.OK);
     }
 
+    @PostMapping("getByFilter")
+    public ResponseEntity<List<Facility>> getFacilitiesByFilter(@RequestBody GetFacilityRequest getFacilityRequest){
+        return new ResponseEntity<List<Facility>>(facilityService.getFacilitiesByFilter(getFacilityRequest), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Facility> createFacility(@RequestBody CreateFacilityRequest createFacilityRequest){
         return new ResponseEntity<Facility>(facilityService.createFacility(createFacilityRequest), HttpStatus.OK);
@@ -37,8 +43,4 @@ public class FacilityController {
     public ResponseEntity<Facility> getFacilityByFacilityId(@RequestBody GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest){
         return new ResponseEntity<Facility>(facilityService.getFacilityByFacilityId(getFacilityByFacilityIdRequest), HttpStatus.OK);
     }
-
-
-
-
 }
