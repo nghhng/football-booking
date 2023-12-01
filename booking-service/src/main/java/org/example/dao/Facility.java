@@ -1,49 +1,45 @@
-package nghhng.footballbooking.dao;
+package org.example.dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
+import org.example.dao.part.Address;
+import org.example.dao.part.Field;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tunght.toby.common.entity.BaseEntity;
-import tunght.toby.common.entity.Comment;
 
 import java.util.List;
 
-@Document(collection = "user")
+@Document(collection = "facility")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDAO {
+public class Facility extends BaseEntity {
 
     @Id
+    @JsonSerialize(using = ToStringSerializer.class)
     private String id;
 
+    @JsonProperty(required = true)
     private String name;
 
-    private String age;
+    @JsonProperty(value = "address", required = true)
+    private Address address;
 
-    private String gender;
+    @JsonProperty(required = true)
+    private String numOfFields;
 
-    private String phone;
+    private String ownerId;
 
-    private String email;
+    private List<Field> fields;
 
-    private String username;
 
-    private String password;
-
-    private String birthDate;
-
-    private List<Comment> comments;
-
-    private Double rating;
 }
 
 

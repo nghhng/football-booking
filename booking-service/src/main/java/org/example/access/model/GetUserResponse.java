@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import tunght.toby.common.entity.BaseEntity;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetUserResponse {
+public class GetUserResponse extends BaseEntity {
 
 
     private String id;

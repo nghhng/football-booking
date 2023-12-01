@@ -12,6 +12,8 @@ import nghhng.facilityservice.dao.part.Field;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tunght.toby.common.entity.BaseEntity;
+import tunght.toby.common.entity.Comment;
 
 import java.util.List;
 
@@ -40,9 +42,9 @@ public class Facility {
 
     private List<Field> fields;
 
+    private List<Comment> comments;
 
-
-
+    private Double rating;
 }
 
 

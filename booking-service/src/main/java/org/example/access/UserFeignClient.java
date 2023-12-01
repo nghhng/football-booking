@@ -3,6 +3,7 @@ package org.example.access;
 import org.example.access.model.GetUserByIdRequest;
 import org.example.access.model.GetUserByUsernameRequest;
 import org.example.access.model.GetUserResponse;
+import org.example.dao.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserFeignClient {
 
     @PostMapping("getByUsername")
-    GetUserResponse getUserByUsername(@RequestBody GetUserByUsernameRequest getUserByUsernameRequest);
+    User getUserByUsername(@RequestBody GetUserByUsernameRequest getUserByUsernameRequest);
 
     @PostMapping("getById")
-    GetUserResponse getUserById(@RequestBody GetUserByIdRequest getUserByIdRequest);
+    User getUserById(@RequestBody GetUserByIdRequest getUserByIdRequest);
 }

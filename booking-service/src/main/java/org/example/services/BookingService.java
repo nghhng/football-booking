@@ -7,7 +7,9 @@ import org.bson.types.ObjectId;
 import org.example.access.*;
 import org.example.access.model.*;
 import org.example.dao.Booking;
+import org.example.dao.Facility;
 import org.example.dao.MatchingRequest;
+import org.example.dao.User;
 import org.example.dao.part.Field;
 import org.example.dao.part.MatchingRequestStatus;
 import org.example.dto.*;
@@ -62,7 +64,7 @@ public class BookingService {
 
         GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(createBookingRequest.getFacilityId());
         //check Facility and maximum number of fields
-        GetFacilityByIdResponse bookedFacility = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
+        Facility bookedFacility = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
         if(bookedFacility==null){
             throw new BaseException("Facility not exists");
         }
@@ -123,7 +125,7 @@ public class BookingService {
 
         booking = bookingRepository.save(booking);
 
-        GetUserResponse user = userFeignClient.getUserById(new GetUserByIdRequest(booking.getUserId()));
+        User user = userFeignClient.getUserById(new GetUserByIdRequest(booking.getUserId()));
 
 
         NotificationDto notificationDto = NotificationDto.builder()
@@ -180,7 +182,7 @@ public class BookingService {
         //check Facility and maximum number of fields
         GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(getAvailableFieldsRequest.getFacilityId());
 
-        GetFacilityByIdResponse response = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
+        Facility response = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
         if(response==null){
             throw new BaseException("Facility not exists");
         }

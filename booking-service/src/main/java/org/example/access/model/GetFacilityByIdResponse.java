@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.example.dao.part.Field;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tunght.toby.common.entity.BaseEntity;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetFacilityByIdResponse {
+public class GetFacilityByIdResponse extends BaseEntity {
 
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
