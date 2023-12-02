@@ -1,11 +1,15 @@
 package org.example.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.example.dao.Facility;
+import org.example.dao.part.Field;
 
-public class GetAvailableFieldsResponse {
-    @JsonProperty("number")
-    private String number;
+@AllArgsConstructor
+@Getter
+@Setter
+public class GetAvailableFieldsResponse{
+    private Field field;
 
-    @JsonProperty("type")
-    private String type;
+    private Integer amount;
 }

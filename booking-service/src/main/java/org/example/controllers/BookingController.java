@@ -39,8 +39,8 @@ public class BookingController {
     }
 
     @PostMapping("getAvailableFields")
-    public ResponseEntity<List<Field>> getAvalableFields(@RequestBody GetAvailableFieldsRequest getAvailableFieldsRequest){
-        return new ResponseEntity<List<Field>>(bookingService.getAvailableFieldsByTimeAndDayAndFacility(getAvailableFieldsRequest), HttpStatus.OK);
+    public ResponseEntity<List<GetAvailableFieldsResponse>> getAvalableFields(@RequestBody GetAvailableFieldsRequest getAvailableFieldsRequest){
+        return new ResponseEntity<List<GetAvailableFieldsResponse>>(bookingService.getAvailableFieldsByTimeAndDayAndFacility(getAvailableFieldsRequest), HttpStatus.OK);
     }
 
     @PostMapping("switchStatus")

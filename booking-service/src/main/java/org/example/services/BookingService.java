@@ -32,6 +32,7 @@ import tunght.toby.common.security.AuthUserDetails;
 import tunght.toby.common.utils.JsonConverter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +76,18 @@ public class BookingService {
 //                } else break;
 //            }
 //        }
+        //Check Booking
+        GetBookingRequest getBookingRequest = GetBookingRequest.builder()
+                .facilityId(createBookingRequest.getFacilityId())
+                .fieldIndex(createBookingRequest.getFieldIndex())
+                .startAt(createBookingRequest.getStartAt())
+                .endAt(createBookingRequest.getEndAt())
+                .date(createBookingRequest.getDate())
+                .build();
+        List<Booking> booked = getBooking(getBookingRequest);
+        if(booked.size()!=0){
+            throw new BaseException("This field is already booked at this timeslot");
+        }
         //get Type of selected field
         String bookingType = new String();
         Optional<Field> selectedField = bookedFacility.getFields().stream()
@@ -137,7 +150,7 @@ public class BookingService {
                 .isRead(false)
                 .build();
 
-        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
+//        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
         return  booking;
     }
 
@@ -170,7 +183,7 @@ public class BookingService {
         return bookings;
     }
 
-    public List<Field> getAvailableFieldsByTimeAndDayAndFacility(GetAvailableFieldsRequest getAvailableFieldsRequest){
+    public List<GetAvailableFieldsResponse> getAvailableFieldsByTimeAndDayAndFacility(GetAvailableFieldsRequest getAvailableFieldsRequest){
         GetBookingRequest getPlacedBookingRequest = GetBookingRequest.builder()
                 .facilityId(getAvailableFieldsRequest.getFacilityId())
                 .startAt(getAvailableFieldsRequest.getStartAt())
@@ -186,14 +199,28 @@ public class BookingService {
         if(response==null){
             throw new BaseException("Facility not exists");
         }
-        List<Field> availableFields = new ArrayList<Field>();
-        for(Field field : response.getFields()){
-            availableFields.add(field);
+        //Get prices
+        GetPriceRequest getPriceRequest = new GetPriceRequest(getAvailableFieldsRequest.getFacilityId(),null, getAvailableFieldsRequest.getStartAt(), getAvailableFieldsRequest.getEndAt());
+        List<GetPriceResponse> priceList = facilityFeignClient.getPrice(getPriceRequest);
+        //Check weekend
+        Map<String, Integer> typeToAmountMap = new HashMap<>();
+        if(!Utils.isWeekend(getAvailableFieldsRequest.getDate())){
+            typeToAmountMap = priceList.stream()
+                    .collect(Collectors.toMap(GetPriceResponse::getFieldType, GetPriceResponse::getAmount));
+        } else{
+            typeToAmountMap = priceList.stream()
+                    .collect(Collectors.toMap(GetPriceResponse::getFieldType, GetPriceResponse::getSpecialAmount));
         }
-        //calculate available field
+        //create list
+        List<GetAvailableFieldsResponse> availableFields = new ArrayList<GetAvailableFieldsResponse>();
+        for(Field field : response.getFields()){
+            Integer amount = typeToAmountMap.get(field.getType());
+            availableFields.add((new GetAvailableFieldsResponse(field, amount)));
+        }
+        //remove booked ones
         for(Booking booking : placedBookings){
             String bookedFieldIndex = booking.getFieldIndex();
-            availableFields.removeIf(element -> bookedFieldIndex.equals(element.getIndex()));
+            availableFields.removeIf(element -> bookedFieldIndex.equals(element.getField().getIndex()));
         }
         return availableFields;
     }

@@ -26,7 +26,7 @@ public class GetPriceResponse {
 
     private Time endAt;
 
-    private int amount;
+    private Integer amount;
 
-    private int specialAmount;
+    private Integer specialAmount;
 }
