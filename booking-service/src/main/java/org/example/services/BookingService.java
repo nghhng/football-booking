@@ -170,6 +170,11 @@ public class BookingService {
                         query.limit(getBookingRequest.getLimit());
                     } else if(field.getName().equals("skip")){
                         query.skip(getBookingRequest.getSkip());
+                    } else if(field.getName().equals("hasOpponent")){
+                        if(value.equals("true"))
+                            criteria.and(field.getName()).is(true);
+                        else if(value.equals("false"))
+                            criteria.and(field.getName()).is(false);
                     } else
                     criteria.and(field.getName()).is(value);
                 }
