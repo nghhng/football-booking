@@ -102,9 +102,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserDto currentUser(AuthUserDetails authUserDetails) {
+    public UserEntity currentUser(AuthUserDetails authUserDetails) {
         UserEntity userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(ErrorCommon.USER_NOT_FOUND));
-        return convertEntityToDto(userEntity);
+        return userEntity;
     }
 
     @Override

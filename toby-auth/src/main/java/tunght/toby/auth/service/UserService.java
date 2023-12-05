@@ -2,6 +2,7 @@ package tunght.toby.auth.service;
 
 import tunght.toby.auth.consts.EUserAction;
 import tunght.toby.auth.dto.UserDto;
+import tunght.toby.common.entity.UserEntity;
 import tunght.toby.common.security.AuthUserDetails;
 
 public interface UserService {
@@ -9,7 +10,7 @@ public interface UserService {
 
     String login(final UserDto.Login login);
 
-    UserDto currentUser(final AuthUserDetails authUserDetails);
+    UserEntity currentUser(final AuthUserDetails authUserDetails);
 
     UserDto update(final UserDto.Update update, final AuthUserDetails authUserDetails);
 

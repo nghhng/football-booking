@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import tunght.toby.auth.dto.UserDto;
 import tunght.toby.auth.service.UserService;
+import tunght.toby.common.entity.UserEntity;
 import tunght.toby.common.security.AuthUserDetails;
 
 import javax.validation.Valid;
@@ -23,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public UserDto currentUser(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
+    public UserEntity currentUser(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return userService.currentUser(authUserDetails);
     }
 
