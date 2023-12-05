@@ -37,4 +37,9 @@ public class MatchingController {
     public ResponseEntity<Booking> respond(@RequestBody ReponseMatchRequest request, @AuthenticationPrincipal AuthUserDetails authUserDetails){
         return new ResponseEntity<Booking>(matchingService.respondMatchingRequest(request, authUserDetails), HttpStatus.OK);
     }
+
+    @PostMapping("getMatchingRequest")
+    public ResponseEntity<List<MatchingRequest>> getMatchingRequest(@RequestBody GetMatchingRequest request){
+        return new ResponseEntity<List<MatchingRequest>>(matchingService.getMatchingRequest(request), HttpStatus.OK);
+    }
 }

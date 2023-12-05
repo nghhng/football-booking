@@ -75,7 +75,7 @@ public class MatchingService {
             throw new BaseException("This request is not PENDING");
         }
         Booking booking = bookingRepository.findById(matchingRequest.getBookingId());
-        if(!booking.getUserId().equals(authUserDetails.getId())){
+        if(!matchingRequest.getHostUserId().equals(authUserDetails.getId())){
             throw new BaseException("This booking is not belong to this user");
         }
         if(request.getAction().equals(MatchingRequestStatus.ACCEPTED.value)){
@@ -98,5 +98,34 @@ public class MatchingService {
         matchingRequestRepository.save(matchingRequest);
         booking = bookingRepository.save(booking);
         return booking;
+    }
+
+    public List<MatchingRequest> getMatchingRequest(GetMatchingRequest getMatchingRequest){
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+        java.lang.reflect.Field[] fields = getMatchingRequest.getClass().getDeclaredFields();
+        for(java.lang.reflect.Field field : fields){
+            field.setAccessible(true);
+            try {
+                Object value = field.get(getMatchingRequest);
+                if(value==null) {
+                    continue;
+                }
+                else {
+                    if(field.getName().equals("limit")){
+                        query.limit(getMatchingRequest.getLimit());
+                    } else if(field.getName().equals("skip")){
+                        query.skip(getMatchingRequest.getSkip());
+                    } else
+                        criteria.and(field.getName()).is(value);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        query.addCriteria(criteria);
+
+        List<MatchingRequest> matchingRequests = mongoTemplate.find(query, MatchingRequest.class);
+        return matchingRequests;
     }
 }
