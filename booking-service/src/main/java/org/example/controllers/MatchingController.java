@@ -42,4 +42,9 @@ public class MatchingController {
     public ResponseEntity<List<MatchingRequest>> getMatchingRequest(@RequestBody GetMatchingRequest request){
         return new ResponseEntity<List<MatchingRequest>>(matchingService.getMatchingRequest(request), HttpStatus.OK);
     }
+
+    @PostMapping("delete")
+    public ResponseEntity<List<MatchingRequest>> delete(@RequestBody DeleteMatchingRequest request){
+        return new ResponseEntity<List<MatchingRequest>>(matchingService.delete(request), HttpStatus.OK);
+    }
 }

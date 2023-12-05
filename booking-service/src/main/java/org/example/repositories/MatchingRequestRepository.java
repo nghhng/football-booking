@@ -11,4 +11,6 @@ public interface MatchingRequestRepository extends MongoRepository<MatchingReque
     MatchingRequest findMatchingRequestById(String id);
 
     List<MatchingRequest> findMatchingRequestByBookingId(String bookingId);
+
+    List<MatchingRequest> deleteMatchingRequestById(String id);
 }

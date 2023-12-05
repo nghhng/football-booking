@@ -51,7 +51,7 @@ public class MatchingService {
     public MatchingRequest matchingRequest(MatchingRestRequest request, AuthUserDetails authUserDetails) {
         String requestorId = authUserDetails.getId();
         Booking booking = bookingRepository.findById(request.getBookingId());
-        if(booking.getUserId().equals(requestorId))
+        if (booking.getUserId().equals(requestorId))
             throw new BaseException("You can not request your own booking");
         MatchingRequest matchingRequest = MatchingRequest.builder()
                 .bookingId(request.getBookingId())
@@ -64,21 +64,21 @@ public class MatchingService {
     }
 
     public Booking respondMatchingRequest(ReponseMatchRequest request, AuthUserDetails authUserDetails) {
-        if(request.getAction()==MatchingRequestStatus.PENDING.value){
+        if (request.getAction() == MatchingRequestStatus.PENDING.value) {
             throw new BaseException("PENDING Action is not acceptable");
         }
         MatchingRequest matchingRequest = matchingRequestRepository.findMatchingRequestById(request.getMatchRequestId());
         if (matchingRequest == null) {
             throw new AppException(ErrorCommon.MATCHING_REQUEST_NOT_FOUND);
         }
-        if (!matchingRequest.getStatus().equals(MatchingRequestStatus.PENDING)){
+        if (!matchingRequest.getStatus().equals(MatchingRequestStatus.PENDING)) {
             throw new BaseException("This request is not PENDING");
         }
         Booking booking = bookingRepository.findById(matchingRequest.getBookingId());
-        if(!matchingRequest.getHostUserId().equals(authUserDetails.getId())){
+        if (!matchingRequest.getHostUserId().equals(authUserDetails.getId())) {
             throw new BaseException("This booking is not belong to this user");
         }
-        if(request.getAction().equals(MatchingRequestStatus.ACCEPTED.value)){
+        if (request.getAction().equals(MatchingRequestStatus.ACCEPTED.value)) {
             matchingRequest.setStatus(MatchingRequestStatus.ACCEPTED);
             booking.setHasOpponent(true);
             booking.setOpponentId(matchingRequest.getRequestorId());
@@ -89,8 +89,7 @@ public class MatchingService {
                         oneRequest.setStatus(MatchingRequestStatus.DENIED);
                         matchingRequestRepository.save(oneRequest);
                     });
-        }
-        else if(request.getAction().equals(MatchingRequestStatus.DENIED.value)){
+        } else if (request.getAction().equals(MatchingRequestStatus.DENIED.value)) {
             matchingRequest.setStatus(MatchingRequestStatus.DENIED);
         } else
             throw new BaseException("Action không đúng, phải là ACCEPTED hoặc DENIED");
@@ -100,21 +99,20 @@ public class MatchingService {
         return booking;
     }
 
-    public List<MatchingRequest> getMatchingRequest(GetMatchingRequest getMatchingRequest){
+    public List<MatchingRequest> getMatchingRequest(GetMatchingRequest getMatchingRequest) {
         Query query = new Query();
         Criteria criteria = new Criteria();
         java.lang.reflect.Field[] fields = getMatchingRequest.getClass().getDeclaredFields();
-        for(java.lang.reflect.Field field : fields){
+        for (java.lang.reflect.Field field : fields) {
             field.setAccessible(true);
             try {
                 Object value = field.get(getMatchingRequest);
-                if(value==null) {
+                if (value == null) {
                     continue;
-                }
-                else {
-                    if(field.getName().equals("limit")){
+                } else {
+                    if (field.getName().equals("limit")) {
                         query.limit(getMatchingRequest.getLimit());
-                    } else if(field.getName().equals("skip")){
+                    } else if (field.getName().equals("skip")) {
                         query.skip(getMatchingRequest.getSkip());
                     } else
                         criteria.and(field.getName()).is(value);
@@ -127,5 +125,17 @@ public class MatchingService {
 
         List<MatchingRequest> matchingRequests = mongoTemplate.find(query, MatchingRequest.class);
         return matchingRequests;
+    }
+
+    public List<MatchingRequest> delete(DeleteMatchingRequest deleteMatchingRequest) {
+        MatchingRequest matchingRequest = matchingRequestRepository.findMatchingRequestById(deleteMatchingRequest.getId());
+        if (matchingRequest == null) {
+            throw new AppException(ErrorCommon.MATCHING_REQUEST_NOT_FOUND);
+        }
+        if (!matchingRequest.getStatus().equals(MatchingRequestStatus.PENDING)) {
+            throw new BaseException("Can only delete PENDING request");
+        }
+        List<MatchingRequest> deletedRequests = matchingRequestRepository.deleteMatchingRequestById(deleteMatchingRequest.getId());
+        return deletedRequests;
     }
 }
