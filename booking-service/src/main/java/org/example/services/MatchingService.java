@@ -83,10 +83,17 @@ public class MatchingService {
             booking.setHasOpponent(true);
             booking.setOpponentId(matchingRequest.getRequestorId());
             List<MatchingRequest> allRequests = matchingRequestRepository.findMatchingRequestByBookingId(matchingRequest.getBookingId());
+            allRequests.stream()
+                    .filter(oneRequest -> !oneRequest.getRequestorId().equals(authUserDetails.getId()))
+                    .forEach(oneRequest -> {
+                        oneRequest.setStatus(MatchingRequestStatus.DENIED);
+                        matchingRequestRepository.save(oneRequest);
+                    });
         }
-        if(request.getAction().equals(MatchingRequestStatus.DENIED.value)){
+        else if(request.getAction().equals(MatchingRequestStatus.DENIED.value)){
             matchingRequest.setStatus(MatchingRequestStatus.DENIED);
-        }
+        } else
+            throw new BaseException("Action không đúng, phải là ACCEPTED hoặc DENIED");
 
         matchingRequestRepository.save(matchingRequest);
         booking = bookingRepository.save(booking);
