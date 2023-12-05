@@ -24,5 +24,7 @@ public class MatchingRequest {
 
     private String requestorId;
 
+    private String hostUserId;
+
     private MatchingRequestStatus status;
 }

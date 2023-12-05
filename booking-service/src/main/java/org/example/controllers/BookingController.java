@@ -48,8 +48,8 @@ public class BookingController {
         return new ResponseEntity<Booking>(bookingService.switchStatus(request), HttpStatus.OK);
     }
 
-    @PostMapping("matchingRequest")
-    public ResponseEntity<MatchingRequest> matchingRequest(@RequestBody MatchingRestRequest request, @AuthenticationPrincipal AuthUserDetails authUserDetails){
-        return new ResponseEntity<MatchingRequest>(matchingService.matchingRequest(request, authUserDetails), HttpStatus.OK);
-    }
+//    @PostMapping("matchingRequest")
+//    public ResponseEntity<MatchingRequest> matchingRequest(@RequestBody MatchingRestRequest request, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+//        return new ResponseEntity<MatchingRequest>(matchingService.matchingRequest(request, authUserDetails), HttpStatus.OK);
+//    }
 }

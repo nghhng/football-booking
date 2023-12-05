@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 import tunght.toby.common.exception.AppException;
 import tunght.toby.common.exception.ErrorCommon;
@@ -49,9 +50,13 @@ public class MatchingService {
 
     public MatchingRequest matchingRequest(MatchingRestRequest request, AuthUserDetails authUserDetails) {
         String requestorId = authUserDetails.getId();
+        Booking booking = bookingRepository.findById(request.getBookingId());
+        if(booking.getUserId().equals(requestorId))
+            throw new BaseException("You can not request your own booking");
         MatchingRequest matchingRequest = MatchingRequest.builder()
                 .bookingId(request.getBookingId())
                 .requestorId(requestorId)
+                .hostUserId(booking.getUserId())
                 .status(MatchingRequestStatus.PENDING)
                 .build();
         MatchingRequest matchingRequestSaved = matchingRequestRepository.save(matchingRequest);
@@ -66,6 +71,9 @@ public class MatchingService {
         if (matchingRequest == null) {
             throw new AppException(ErrorCommon.MATCHING_REQUEST_NOT_FOUND);
         }
+        if (!matchingRequest.getStatus().equals(MatchingRequestStatus.PENDING)){
+            throw new BaseException("This request is not PENDING");
+        }
         Booking booking = bookingRepository.findById(matchingRequest.getBookingId());
         if(!booking.getUserId().equals(authUserDetails.getId())){
             throw new BaseException("This booking is not belong to this user");
@@ -74,6 +82,7 @@ public class MatchingService {
             matchingRequest.setStatus(MatchingRequestStatus.ACCEPTED);
             booking.setHasOpponent(true);
             booking.setOpponentId(matchingRequest.getRequestorId());
+            List<MatchingRequest> allRequests = matchingRequestRepository.findMatchingRequestByBookingId(matchingRequest.getBookingId());
         }
         if(request.getAction().equals(MatchingRequestStatus.DENIED.value)){
             matchingRequest.setStatus(MatchingRequestStatus.DENIED);
