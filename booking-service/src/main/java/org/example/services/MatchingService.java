@@ -127,13 +127,16 @@ public class MatchingService {
         return matchingRequests;
     }
 
-    public List<MatchingRequest> delete(DeleteMatchingRequest deleteMatchingRequest) {
+    public List<MatchingRequest> delete(DeleteMatchingRequest deleteMatchingRequest, AuthUserDetails authUserDetails) {
         MatchingRequest matchingRequest = matchingRequestRepository.findMatchingRequestById(deleteMatchingRequest.getId());
         if (matchingRequest == null) {
             throw new AppException(ErrorCommon.MATCHING_REQUEST_NOT_FOUND);
         }
         if (!matchingRequest.getStatus().equals(MatchingRequestStatus.PENDING)) {
             throw new BaseException("Can only delete PENDING request");
+        }
+        if (!matchingRequest.getRequestorId().equals(authUserDetails.getId())) {
+            throw new BaseException("This request is not belong to you");
         }
         List<MatchingRequest> deletedRequests = matchingRequestRepository.deleteMatchingRequestById(deleteMatchingRequest.getId());
         return deletedRequests;

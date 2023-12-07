@@ -44,7 +44,7 @@ public class MatchingController {
     }
 
     @PostMapping("delete")
-    public ResponseEntity<List<MatchingRequest>> delete(@RequestBody DeleteMatchingRequest request){
-        return new ResponseEntity<List<MatchingRequest>>(matchingService.delete(request), HttpStatus.OK);
+    public ResponseEntity<List<MatchingRequest>> delete(@RequestBody DeleteMatchingRequest request, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+        return new ResponseEntity<List<MatchingRequest>>(matchingService.delete(request, authUserDetails), HttpStatus.OK);
     }
 }
