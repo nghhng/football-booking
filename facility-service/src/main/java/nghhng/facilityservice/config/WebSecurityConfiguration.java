@@ -46,7 +46,7 @@ public class WebSecurityConfiguration {
                 .formLogin().disable()
                 .authorizeRequests()
                 .antMatchers(generalEndpoints).permitAll()
-                .anyRequest().hasAnyAuthority(ERole.ROLE_ADMIN.name(), ERole.ROLE_USER.name())
+                .anyRequest().hasAnyAuthority(ERole.ROLE_OWNER.name(), ERole.ROLE_USER.name())
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
