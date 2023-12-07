@@ -78,9 +78,12 @@ public class MatchingService {
         if (!matchingRequest.getHostUserId().equals(authUserDetails.getId())) {
             throw new BaseException("This booking is not belong to this user");
         }
+        if (booking.isHasOpponent()==false) {
+            throw new BaseException("This booking is not looking for opponent");
+        }
         if (request.getAction().equals(MatchingRequestStatus.ACCEPTED.value)) {
             matchingRequest.setStatus(MatchingRequestStatus.ACCEPTED);
-            booking.setHasOpponent(true);
+            booking.setHasOpponent(false);
             booking.setOpponentId(matchingRequest.getRequestorId());
             List<MatchingRequest> allRequests = matchingRequestRepository.findMatchingRequestByBookingId(matchingRequest.getBookingId());
             allRequests.stream()

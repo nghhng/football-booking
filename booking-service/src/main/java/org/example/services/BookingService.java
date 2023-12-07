@@ -235,6 +235,9 @@ public class BookingService {
         if (booking == null) {
             throw new AppException(ErrorCommon.BOOKING_NOT_FOUND);
         }
+        if(booking.getOpponentId()!=null){
+            throw new BaseException("This booking has opponent, can not switch Status");
+        }
         booking.setHasOpponent(!booking.isHasOpponent());
         booking = bookingRepository.save(booking);
 //        kafkaTemplate.send("notification-topic", new CreateBookingEvent(bookingSaved.get_id().toString()));
