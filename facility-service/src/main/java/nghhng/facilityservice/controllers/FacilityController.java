@@ -1,12 +1,9 @@
 package nghhng.facilityservice.controllers;
 
 
-import nghhng.facilityservice.dto.GetFacilityByFacilityIdRequest;
-import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
-import nghhng.facilityservice.dto.GetFacilityRequest;
+import nghhng.facilityservice.dto.*;
 import nghhng.facilityservice.services.FacilityService;
 import nghhng.facilityservice.dao.Facility;
-import nghhng.facilityservice.dto.CreateFacilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +23,8 @@ public class FacilityController {
     }
 
     @PostMapping("getByFilter")
-    public ResponseEntity<List<Facility>> getFacilitiesByFilter(@RequestBody GetFacilityRequest getFacilityRequest){
-        return new ResponseEntity<List<Facility>>(facilityService.getFacilitiesByFilter(getFacilityRequest), HttpStatus.OK);
+    public ResponseEntity<GetFacilityResponse> getFacilitiesByFilter(@RequestBody GetFacilityRequest getFacilityRequest){
+        return new ResponseEntity<GetFacilityResponse>(facilityService.getFacilitiesByFilter(getFacilityRequest), HttpStatus.OK);
     }
 
     @PostMapping

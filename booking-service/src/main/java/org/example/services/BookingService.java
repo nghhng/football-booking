@@ -84,8 +84,8 @@ public class BookingService {
                 .endAt(createBookingRequest.getEndAt())
                 .date(createBookingRequest.getDate())
                 .build();
-        List<Booking> booked = getBooking(getBookingRequest);
-        if(booked.size()!=0){
+        GetBookingResponse booked = getBooking(getBookingRequest);
+        if(booked.getData().size()!=0){
             throw new BaseException("This field is already booked at this timeslot");
         }
         //get Type of selected field
@@ -155,7 +155,7 @@ public class BookingService {
         return  booking;
     }
 
-    public List<Booking> getBooking(GetBookingRequest getBookingRequest){
+    public GetBookingResponse getBooking(GetBookingRequest getBookingRequest){
         Query query = new Query();
         Criteria criteria = new Criteria();
         java.lang.reflect.Field[] fields = getBookingRequest.getClass().getDeclaredFields();
@@ -168,9 +168,9 @@ public class BookingService {
                 }
                 else {
                     if(field.getName().equals("limit")){
-                        query.limit(getBookingRequest.getLimit());
+//                        query.limit(getBookingRequest.getLimit());
                     } else if(field.getName().equals("skip")){
-                        query.skip(getBookingRequest.getSkip());
+//                        query.skip(getBookingRequest.getSkip());
                     } else if(field.getName().equals("hasOpponent")){
                         if(value.equals("true"))
                             criteria.and(field.getName()).is(true);
@@ -184,9 +184,18 @@ public class BookingService {
             }
         }
         query.addCriteria(criteria);
+        List<Booking> totalBookings = mongoTemplate.find(query, Booking.class);
+        //Get paged booking
+        if(getBookingRequest.getLimit()!=null){
+            query.limit(getBookingRequest.getLimit());
+        }
+        if(getBookingRequest.getSkip()!=null){
+            query.skip(getBookingRequest.getSkip());
+        }
+        List<Booking> pagedBookings = mongoTemplate.find(query, Booking.class);
 
-        List<Booking> bookings = mongoTemplate.find(query, Booking.class);
-        return bookings;
+        GetBookingResponse response = new GetBookingResponse(pagedBookings, totalBookings.size());
+        return response;
     }
 
     public List<GetAvailableFieldsResponse> getAvailableFieldsByTimeAndDayAndFacility(GetAvailableFieldsRequest getAvailableFieldsRequest){
@@ -196,7 +205,7 @@ public class BookingService {
                 .endAt(getAvailableFieldsRequest.getEndAt())
                 .date(getAvailableFieldsRequest.getDate())
                 .build();
-        List<Booking> placedBookings = this.getBooking(getPlacedBookingRequest);
+        GetBookingResponse placedBookings = this.getBooking(getPlacedBookingRequest);
 
         //check Facility and maximum number of fields
         GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(getAvailableFieldsRequest.getFacilityId());
@@ -224,7 +233,7 @@ public class BookingService {
             availableFields.add((new GetAvailableFieldsResponse(field, amount)));
         }
         //remove booked ones
-        for(Booking booking : placedBookings){
+        for(Booking booking : placedBookings.getData()){
             String bookedFieldIndex = booking.getFieldIndex();
             availableFields.removeIf(element -> bookedFieldIndex.equals(element.getField().getIndex()));
         }

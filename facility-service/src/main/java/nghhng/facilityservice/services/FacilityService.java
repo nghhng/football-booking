@@ -7,10 +7,7 @@ import nghhng.facilityservice.access.GetUserResponse;
 import nghhng.facilityservice.access.UserFeignClient;
 import nghhng.facilityservice.dao.Facility;
 import nghhng.facilityservice.dao.part.Address;
-import nghhng.facilityservice.dto.CreateFacilityRequest;
-import nghhng.facilityservice.dto.GetFacilityByFacilityIdRequest;
-import nghhng.facilityservice.dto.GetFacilityByUsernameRequest;
-import nghhng.facilityservice.dto.GetFacilityRequest;
+import nghhng.facilityservice.dto.*;
 import nghhng.facilityservice.exception.BaseException;
 import nghhng.facilityservice.repositories.FacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +39,7 @@ public class FacilityService {
         return facilityRepository.findAll();
     }
 
-    public List<Facility> getFacilitiesByFilter(GetFacilityRequest getFacilityRequest){
+    public GetFacilityResponse getFacilitiesByFilter(GetFacilityRequest getFacilityRequest){
         Query query = new Query();
         Criteria criteria = new Criteria();
         java.lang.reflect.Field[] fields = getFacilityRequest.getClass().getDeclaredFields();
@@ -55,9 +52,9 @@ public class FacilityService {
                 }
                 else {
                     if(field.getName().equals("limit")){
-                        query.limit(getFacilityRequest.getLimit());
+//                        query.limit(getFacilityRequest.getLimit());
                     } else if(field.getName().equals("skip")){
-                        query.skip(getFacilityRequest.getSkip());
+//                        query.skip(getFacilityRequest.getSkip());
                     } else if(field.getName().equals("name")){
                         criteria.and("name").regex(".*" + value + ".*", "i");
                     } else if(field.getName().equals("ward")){
@@ -73,8 +70,19 @@ public class FacilityService {
         }
         query.addCriteria(criteria);
 
-        List<Facility> facilities = mongoTemplate.find(query, Facility.class);
-        return facilities;
+        List<Facility> totalFacilities = mongoTemplate.find(query, Facility.class);
+
+        //Get paged booking
+        if(getFacilityRequest.getLimit()!=null){
+            query.limit(getFacilityRequest.getLimit());
+        }
+        if(getFacilityRequest.getSkip()!=null){
+            query.skip(getFacilityRequest.getSkip());
+        }
+        List<Facility> pagedFacilities = mongoTemplate.find(query, Facility.class);
+
+        GetFacilityResponse response = new GetFacilityResponse(pagedFacilities, totalFacilities.size());
+        return response;
     }
 
     public Facility createFacility (CreateFacilityRequest createFacilityRequest) {
