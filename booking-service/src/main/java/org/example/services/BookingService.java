@@ -145,7 +145,7 @@ public class BookingService {
                 .type(ENotifications.BOOKING)
                 .fromUserId(authUserDetails.getId())
                 .toUserId(bookedFacility.getOwnerId())
-                .bookingId(booking.getId())
+                .detailId(booking.getId())
                 .message(ENotifications.getNotificationMessage(ENotifications.BOOKING, user.getUsername()))
                 .isRead(false)
                 .build();

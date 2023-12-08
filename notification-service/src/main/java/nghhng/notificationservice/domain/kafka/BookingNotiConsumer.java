@@ -31,7 +31,7 @@ public class BookingNotiConsumer {
 
         NotificationEntity notificationEntity = NotificationEntity.builder()
                 .type(notificationDto.getType())
-                .bookingId(notificationDto.getBookingId())
+                .detailId(notificationDto.getBookingId())
                 .fromUserId(notificationDto.getFromUserId())
                 .toUserId(notificationDto.getToUserId())
                 .message(notificationDto.getMessage())
@@ -42,7 +42,7 @@ public class BookingNotiConsumer {
         if (user == null) {
             logger.info("user {} not online", notificationDto.getToUserId());
         } else {
-            IPacket packet = new UserPacket(CmdDefs.COMMENT_NOTI_CMD);
+            IPacket packet = new UserPacket(CmdDefs.BOOKING_NOTI_CMD);
             NotificationPackageSender.sendDataPackage(notificationEntity, user, packet);
             System.out.println(notificationEntity.toString());
         }
