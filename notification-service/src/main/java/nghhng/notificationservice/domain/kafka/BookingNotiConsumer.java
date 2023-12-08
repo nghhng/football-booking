@@ -31,7 +31,7 @@ public class BookingNotiConsumer {
 
         NotificationEntity notificationEntity = NotificationEntity.builder()
                 .type(notificationDto.getType())
-                .detailId(notificationDto.getBookingId())
+                .detailId(notificationDto.getDetailId())
                 .fromUserId(notificationDto.getFromUserId())
                 .toUserId(notificationDto.getToUserId())
                 .message(notificationDto.getMessage())

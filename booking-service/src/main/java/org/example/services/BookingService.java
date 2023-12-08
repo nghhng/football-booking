@@ -136,10 +136,10 @@ public class BookingService {
                 .fieldIndex(createBookingRequest.getFieldIndex())
                 .build();
 
-        booking = bookingRepository.save(booking);
 
         User user = userFeignClient.getUserById(new GetUserByIdRequest(booking.getUserId()));
 
+        booking = bookingRepository.save(booking);
 
         NotificationDto notificationDto = NotificationDto.builder()
                 .type(ENotifications.BOOKING)
@@ -149,8 +149,9 @@ public class BookingService {
                 .message(ENotifications.getNotificationMessage(ENotifications.BOOKING, user.getUsername()))
                 .isRead(false)
                 .build();
-
+        System.out.println("SEND KAFKA: " + notificationDto.toString());
         notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
+
         return  booking;
     }
 

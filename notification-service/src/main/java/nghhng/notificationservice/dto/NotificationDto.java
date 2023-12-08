@@ -20,7 +20,7 @@ public class NotificationDto {
 
     private String fromUserId;
 
-    private String bookingId;
+    private String detailId;
 
     private Boolean isRead;
 }
