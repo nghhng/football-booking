@@ -150,7 +150,7 @@ public class BookingService {
                 .isRead(false)
                 .build();
 
-//        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
+        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
         return  booking;
     }
 

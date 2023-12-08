@@ -38,14 +38,14 @@ public class BookingNotiConsumer {
                 .isRead(false)
                 .build();
 
-//        IUser user = UserManager.getUser(notificationDto.getToUserId());
-//        if (user == null) {
-//            logger.info("user {} not online", notificationDto.getToUserId());
-//        } else {
-////            IPacket packet = new UserPacket(CmdDefs.COMMENT_NOTI_CMD);
-////            NotificationPackageSender.sendDataPackage(notificationEntity, user, packet);
-//            System.out.println(notificationEntity.toString());
-//        }
+        IUser user = UserManager.getUser(notificationDto.getToUserId());
+        if (user == null) {
+            logger.info("user {} not online", notificationDto.getToUserId());
+        } else {
+            IPacket packet = new UserPacket(CmdDefs.COMMENT_NOTI_CMD);
+            NotificationPackageSender.sendDataPackage(notificationEntity, user, packet);
+            System.out.println(notificationEntity.toString());
+        }
         System.out.println(notificationEntity.toString());
 
         notificationRepository.save(notificationEntity);
