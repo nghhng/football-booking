@@ -24,14 +24,14 @@ public class NotificationController {
     public Long countUnreadNotifications(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return notificationService.countUnreadNotifications(authUserDetails.getId());
     }
-//
-//    @PutMapping("read/{id}")
-//    public void readNotification(@PathVariable(name = "id") Long notificationId) {
-//        notificationService.readNotification(notificationId);
-//    }
-//
-//    @PutMapping("read-all")
-//    public void readAllNotificationsByUserId(@RequestParam(name = "userId") String userId) {
-//        notificationService.readAllNotificationsByUserId(userId);
-//    }
+
+    @PutMapping("read/{id}")
+    public void readNotification(@PathVariable(name = "id") String notificationId) {
+        notificationService.readNotification(notificationId);
+    }
+
+    @PutMapping("read-all")
+    public void readAllNotificationsByUserId(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
+        notificationService.readAllNotificationsByUserId(authUserDetails.getId());
+    }
 }
