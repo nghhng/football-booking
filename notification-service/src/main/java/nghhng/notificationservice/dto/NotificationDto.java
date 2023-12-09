@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import tunght.toby.common.enums.ENotifications;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,4 +25,6 @@ public class NotificationDto {
     private String detailId;
 
     private Boolean isRead;
+
+    private Instant timeStamp;
 }

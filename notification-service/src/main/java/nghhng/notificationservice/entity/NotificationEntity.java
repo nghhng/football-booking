@@ -7,6 +7,7 @@ import tunght.toby.common.entity.BaseEntity;
 import tunght.toby.common.enums.ENotifications;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 @Document(collection = "notification")
 @Data
@@ -29,5 +30,7 @@ public class NotificationEntity{
     private String detailId;
 
     private Boolean isRead;
+
+    private Instant timeStamp;
 
 }

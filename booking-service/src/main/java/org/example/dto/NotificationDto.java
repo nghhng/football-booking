@@ -1,15 +1,15 @@
 package org.example.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import tunght.toby.common.enums.ENotifications;
+
+import java.time.Instant;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
+@ToString
 public class NotificationDto {
 
     private String toUserId;
@@ -23,4 +23,6 @@ public class NotificationDto {
     private String detailId;
 
     private Boolean isRead;
+
+    private Instant timeStamp;
 }

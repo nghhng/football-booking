@@ -31,6 +31,7 @@ import tunght.toby.common.exception.ErrorCommon;
 import tunght.toby.common.security.AuthUserDetails;
 import tunght.toby.common.utils.JsonConverter;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -146,8 +147,9 @@ public class BookingService {
                 .fromUserId(authUserDetails.getId())
                 .toUserId(bookedFacility.getOwnerId())
                 .detailId(booking.getId())
-                .message(ENotifications.getNotificationMessage(ENotifications.BOOKING, user.getUsername()))
+                .message(createBookingNotiMessage(user, booking))
                 .isRead(false)
+                .timeStamp(Instant.now())
                 .build();
         System.out.println("SEND KAFKA: " + notificationDto.toString());
         notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
@@ -263,5 +265,10 @@ public class BookingService {
                 .build();
         MatchingRequest matchingRequestSaved = matchingRequestRepository.save(matchingRequest);
         return matchingRequestSaved;
+    }
+
+    private String createBookingNotiMessage(User user, Booking booking){
+        String form = "%s đã đặt sân số %s, thời gian: %s-%s, %s";
+        return String.format(form, user.getUsername(), booking.getFieldIndex(), booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getDate());
     }
 }

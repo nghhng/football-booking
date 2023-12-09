@@ -36,6 +36,7 @@ public class BookingNotiConsumer {
                 .toUserId(notificationDto.getToUserId())
                 .message(notificationDto.getMessage())
                 .isRead(false)
+                .timeStamp(notificationDto.getTimeStamp())
                 .build();
 
         IUser user = UserManager.getUser(notificationDto.getToUserId());
