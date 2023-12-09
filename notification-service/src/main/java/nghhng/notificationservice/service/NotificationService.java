@@ -13,14 +13,14 @@ import java.util.List;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
 
-//    public List<NotificationEntity> getNotificationsByUserId(String userId) {
-//        return notificationRepository.findAllByToUserIdOrderByCreatedAtDesc(userId);
-//    }
-//
-//    public Long countUnreadNotifications(String userId) {
-//        return notificationRepository.countByToUserIdAndIsRead(userId, false);
-//    }
-//
+    public List<NotificationEntity> getNotificationsByUserId(String userId) {
+        return notificationRepository.findByToUserIdOrderByTimeStamp(userId);
+    }
+
+    public Long countUnreadNotifications(String userId) {
+        return notificationRepository.countByToUserIdAndIsRead(userId, false);
+    }
+
 //    @Transactional
 //    public void readNotification(Long notificationId) {
 //        notificationRepository.readByNotificationId(notificationId);
