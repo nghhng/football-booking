@@ -4,4 +4,4 @@ COPY target/*.jar app.jar
 
 EXPOSE 7300
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "--add-opens", "java.base/java.time=ALL-UNNAMED", "-jar", "/app.jar"]

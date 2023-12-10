@@ -23,6 +23,7 @@ services:
     restart: always
     networks:
       - football-booking
+    command: ["java", "--add-opens", "java.base/java.time=ALL-UNNAMED", "-jar", "/app.jar"]
 
   discovery-service:
     image: nghhng/football-booking:discovery
@@ -47,6 +48,7 @@ services:
     restart: always
     networks:
       - football-booking
+    command: ["java", "--add-opens", "java.base/java.time=ALL-UNNAMED", "-jar", "/app.jar"]
 
   redis:
     image: redis:6.2.4-alpine

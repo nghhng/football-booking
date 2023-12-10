@@ -10,7 +10,7 @@ import tunght.toby.common.security.AuthUserDetails;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/notifications")
+@RequestMapping(value = "/notification")
 @RequiredArgsConstructor
 public class NotificationController {
     private final NotificationService notificationService;
