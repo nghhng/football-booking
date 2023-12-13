@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
                 .username(registration.getUsername())
                 .email(registration.getEmail())
                 .password(passwordEncoder.encode(registration.getPassword()))
+                .name(registration.getName())
 //                .bio("")
                 .image(CommonConst.DEFAULT_AVATAR_URL)
                 .status(EStatus.INACTIVE)
@@ -119,10 +120,13 @@ public class UserServiceImpl implements UserService {
                     .ifPresent(found -> {throw new AppException(ErrorCommon.DUPLICATED_USER);});
             userEntity.setUsername(update.getUsername());
         }
+        if (update.getName() != null) {
+            userEntity.setName(update.getName());
+        }
 
-//        if (update.getBio() != null) {
-////            userEntity.setBio(update.getBio());
-//        }
+        if (update.getPhone() != null) {
+            userEntity.setPhone(update.getPhone());
+        }
 
         if (update.getImage() != null) {
             userEntity.setImage(update.getImage());

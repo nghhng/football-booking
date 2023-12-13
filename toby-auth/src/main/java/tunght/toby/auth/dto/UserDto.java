@@ -28,6 +28,7 @@ public class UserDto {
     private String id;
     private String email;
     private String username;
+    private String name;
 //    private String bio;
     private String image;
     @Enumerated(EnumType.STRING)
@@ -43,9 +44,12 @@ public class UserDto {
     @JsonTypeName("user")
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
     public static class Registration {
-        @NotBlank(message = "Tên hiển thị không được để trống")
-        @Pattern(regexp = "[\\w\\d]{1,30}", message = "Tên hiển thị chỉ được bao gồm chữ cái, kí tự số hoặc gạch dưới, ít nhất 1 kí tự số")
+        @NotBlank(message = "Username không được để trống")
+        @Pattern(regexp = "[\\w\\d]{1,30}", message = "Username chỉ được bao gồm chữ cái, kí tự số hoặc gạch dưới, ít nhất 1 kí tự số")
         private String username;
+
+        @NotBlank(message = "Tên không được để trống")
+        private String name;
 
         @NotBlank(message = "Email không được để trống")
         @Email(message = "Email không đúng định dạng")
@@ -90,6 +94,7 @@ public class UserDto {
 //    @JsonTypeName("user")
 //    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
     public static class Update {
+        private String name;
         private String email;
         private String username;
         private String phone;
