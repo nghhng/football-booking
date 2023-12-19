@@ -11,6 +11,8 @@ import org.example.dao.part.Time;
 @AllArgsConstructor
 public class GetBookingRequest {
 
+    private String id;
+
     private String facilityId;
 
     private String fieldIndex;

@@ -124,10 +124,14 @@ public class BookingService {
 //            bookField.setType(createBookingRequest.getFieldType());
 //            bookFields.add(bookField);
 //        }
+        User user = userFeignClient.getUserById(new GetUserByIdRequest(authUserDetails.getId()));
 
         Booking booking = Booking.builder()
                 .facilityId(createBookingRequest.getFacilityId())
+                .facilityName(bookedFacility.getName())
                 .userId(authUserDetails.getId())
+                .userName(user.getName())
+                .userImage(user.getImage())
                 .date(createBookingRequest.getDate())
                 .priceId(priceId)
                 .price(price)
@@ -138,7 +142,6 @@ public class BookingService {
                 .build();
 
 
-        User user = userFeignClient.getUserById(new GetUserByIdRequest(booking.getUserId()));
 
         booking = bookingRepository.save(booking);
 

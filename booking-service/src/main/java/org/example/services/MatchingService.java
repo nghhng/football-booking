@@ -4,12 +4,12 @@ package org.example.services;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.example.access.FacilityFeignClient;
-import org.example.access.model.GetFacilityByFacilityIdRequest;
-import org.example.access.model.GetFacilityByIdResponse;
-import org.example.access.model.GetPriceRequest;
-import org.example.access.model.GetPriceResponse;
+import org.example.access.UserFeignClient;
+import org.example.access.model.*;
 import org.example.dao.Booking;
+import org.example.dao.Facility;
 import org.example.dao.MatchingRequest;
+import org.example.dao.User;
 import org.example.dao.part.Field;
 import org.example.dao.part.MatchingRequestStatus;
 import org.example.dto.*;
@@ -44,6 +44,9 @@ public class MatchingService {
     FacilityFeignClient facilityFeignClient;
 
     @Autowired
+    UserFeignClient userFeignClient;
+
+    @Autowired
     MongoTemplate mongoTemplate;
 
 //    private final KafkaTemplate<String, CreateBookingEvent> kafkaTemplate;
@@ -51,12 +54,32 @@ public class MatchingService {
     public MatchingRequest matchingRequest(MatchingRestRequest request, AuthUserDetails authUserDetails) {
         String requestorId = authUserDetails.getId();
         Booking booking = bookingRepository.findById(request.getBookingId());
+        Facility facility = facilityFeignClient.getFacilityById(new GetFacilityByFacilityIdRequest(booking.getFacilityId()));
+        User hostUser = userFeignClient.getUserById(new GetUserByIdRequest(booking.getUserId()));
+        User requestor = userFeignClient.getUserById(new GetUserByIdRequest(authUserDetails.getId()));
         if (booking.getUserId().equals(requestorId))
             throw new BaseException("You can not request your own booking");
+        GetMatchingRequest checkRequestFilter = GetMatchingRequest.builder()
+                .bookingId(request.getBookingId())
+                .requestorId(authUserDetails.getId())
+                .build();
+        List<MatchingRequest> checkRequests = getMatchingRequest(checkRequestFilter);
+        if(!checkRequests.isEmpty()){
+            throw new BaseException("You already requested this booking");
+        }
         MatchingRequest matchingRequest = MatchingRequest.builder()
                 .bookingId(request.getBookingId())
+                .facilityName(facility.getName())
+                .startAt(booking.getStartAt())
+                .endAt(booking.getEndAt())
+                .date(booking.getDate())
+                .price(booking.getPrice())
                 .requestorId(requestorId)
+                .requestorImage(requestor.getImage())
+                .requestorName(requestor.getName())
                 .hostUserId(booking.getUserId())
+                .hostUserImage(hostUser.getImage())
+                .hostUserName(hostUser.getName())
                 .status(MatchingRequestStatus.PENDING)
                 .build();
         MatchingRequest matchingRequestSaved = matchingRequestRepository.save(matchingRequest);

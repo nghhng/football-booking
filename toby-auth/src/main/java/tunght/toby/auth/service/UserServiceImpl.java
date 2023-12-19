@@ -94,10 +94,13 @@ public class UserServiceImpl implements UserService {
         return UserDto.builder()
                 .id(userEntity.getId())
                 .username(userEntity.getUsername())
-//                .bio(userEntity.getBio())
                 .email(userEntity.getEmail())
                 .image(userEntity.getImage())
-//                .roles(userEntity.getRoles().stream().map(role -> role.getRole().name()).collect(Collectors.toList()))
+                .age(userEntity.getAge())
+                .phone(userEntity.getPhone())
+                .name(userEntity.getName())
+                .gender(userEntity.getGender())
+                .roles(userEntity.getRoles())
                 .build();
     }
 

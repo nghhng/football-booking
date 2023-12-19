@@ -46,6 +46,8 @@ public class UserDAO {
 
     private String birthDate;
 
+    private String image;
+
     private List<Comment> comments;
 
     private Double rating;

@@ -1,38 +1,23 @@
-package org.example.dao;
+package org.example.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.example.dao.part.Time;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
-
-
-@Document(collection = "booking")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 
-public class Booking {
-
-    @Id
+public class GetBookingDetailResponse {
     private String id;
 
     private String userId;
 
-    private String userName;
-
-    private String userImage;
-
     private String facilityId;
-
-    private String facilityName;
 
     private String fieldIndex;
 
@@ -51,5 +36,16 @@ public class Booking {
 
     private String opponentId;
 
-}
+    @Field("user.name")
+    private String userName;
 
+    @Field("user.age")
+    private int userAge;
+
+    @Field("user.image")
+    private String userImage;
+
+    @Field("facility.name")
+    private String facilityName;
+
+}
