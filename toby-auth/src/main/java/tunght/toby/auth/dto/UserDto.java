@@ -36,6 +36,8 @@ public class UserDto {
     private String phone;
     private String age;
     private String gender;
+    private String trackingId;
+    private String merchantId;
 
 
     @Getter
@@ -101,6 +103,8 @@ public class UserDto {
         private String age;
         private String gender;
         private String image;
+        private String trackingId;
+        private String merchantId;
     }
 
     @Getter

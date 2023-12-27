@@ -143,6 +143,14 @@ public class UserServiceImpl implements UserService {
             userEntity.setAge(update.getAge());
         }
 
+        if (update.getTrackingId() != null) {
+            userEntity.setTrackingId(update.getTrackingId());
+        }
+
+        if (update.getMerchantId() != null) {
+            userEntity.setMerchantId(update.getMerchantId());
+        }
+
         userRepository.save(userEntity);
         return convertEntityToDto(userEntity);
     }
