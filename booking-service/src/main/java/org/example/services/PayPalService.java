@@ -23,6 +23,9 @@ public class PayPalService {
     @Value("${paypal.clientSecret}")
     private String clientSecret;
 
+    @Value("${paypal.return.url}")
+    private String returnUrl;
+
     public String getAccessToken() {
         String authorization = "Basic " + Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes());
         PayPalAuthResponse authResponse = paypalFeignClient.getToken(authorization, "client_credentials");
@@ -32,6 +35,7 @@ public class PayPalService {
     public PayPalPartnerReferralResponse partnerReferral(){
         String authHeader = "Bearer " + this.getAccessToken();
         PayPalPartnerReferralRequest partnerReferralRequest = new PayPalPartnerReferralRequest();
+        partnerReferralRequest.getPartnerConfigOverride().put("return_url", returnUrl);
         return paypalFeignClient.createPartnerReferral(authHeader, partnerReferralRequest);
     }
 }
