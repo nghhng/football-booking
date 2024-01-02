@@ -2,9 +2,7 @@ package org.example.access;
 
 import feign.Headers;
 import feign.QueryMap;
-import org.example.access.model.PayPalAuthResponse;
-import org.example.access.model.PayPalPartnerReferralRequest;
-import org.example.access.model.PayPalPartnerReferralResponse;
+import org.example.access.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,4 +21,9 @@ public interface PayPalFeignClient {
     PayPalPartnerReferralResponse createPartnerReferral(@RequestHeader("Authorization") String authorization,
                                                         @RequestBody PayPalPartnerReferralRequest request);
 
+    @PostMapping("${paypal.create.order.endpoint}")
+    PayPalCreateOrderResponse createOrder(@RequestHeader("Authorization") String authorization,
+                                          @RequestHeader("PayPal-Partner-Attribution-Id") String partnerAttributeId,
+                                          @RequestHeader("PayPal-Auth-Assertion") String authAssertion,
+                                          @RequestBody PayPalCreateOrderRequest request);
 }

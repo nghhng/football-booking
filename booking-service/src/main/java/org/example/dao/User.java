@@ -45,6 +45,10 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private EStatus status;
+
+    private String trackingId;
+
+    private String merchantId;
 }
 
 

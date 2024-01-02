@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.bson.types.ObjectId;
+import org.example.access.model.PayPalCreateOrderResponse;
 import org.example.dao.MatchingRequest;
 import org.example.dao.part.Field;
 import org.example.dao.Booking;
@@ -29,8 +30,8 @@ public class BookingController {
 
     @Operation(summary = "Api create booking")
     @PostMapping("createBooking")
-    public ResponseEntity<Booking> createBooking(@RequestBody CreateBookingRequest createBookingRequest, @AuthenticationPrincipal AuthUserDetails authUserDetails){
-        return new ResponseEntity<Booking>(bookingService.createBooking(createBookingRequest, authUserDetails), HttpStatus.OK);
+    public ResponseEntity<PayPalCreateOrderResponse> createBooking(@RequestBody CreateBookingRequest createBookingRequest, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+        return new ResponseEntity<PayPalCreateOrderResponse>(bookingService.createBooking(createBookingRequest, authUserDetails), HttpStatus.OK);
     }
 
     @PostMapping("getBooking")

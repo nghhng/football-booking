@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -59,10 +60,13 @@ public class BookingService {
 
     private final KafkaTemplate<String, Object> notiKafkaTemplate;
 
+    @Autowired
+    private final RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    PayPalService payPalService;
 
-
-    public Booking createBooking(CreateBookingRequest createBookingRequest, AuthUserDetails authUserDetails ){
+    public PayPalCreateOrderResponse createBooking(CreateBookingRequest createBookingRequest, AuthUserDetails authUserDetails ){
 
         GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(createBookingRequest.getFacilityId());
         //check Facility and maximum number of fields
@@ -125,6 +129,7 @@ public class BookingService {
 //            bookFields.add(bookField);
 //        }
         User user = userFeignClient.getUserById(new GetUserByIdRequest(authUserDetails.getId()));
+        User facilityOwner = userFeignClient.getUserById(new GetUserByIdRequest(bookedFacility.getOwnerId()));
 
         Booking booking = Booking.builder()
                 .facilityId(createBookingRequest.getFacilityId())
@@ -142,6 +147,11 @@ public class BookingService {
                 .build();
 
 
+//        var jsonStr = JsonConverter.serializeObject(booking);
+//        redisTemplate.opsForValue()
+//                .set(jwt, jsonStr, Duration.ofSeconds(jwtUtils.getValidSeconds()));
+
+        PayPalCreateOrderResponse response = payPalService.createPayPalOrder(booking, facilityOwner.getMerchantId());
 
         booking = bookingRepository.save(booking);
 
@@ -157,7 +167,7 @@ public class BookingService {
         System.out.println("SEND KAFKA: " + notificationDto.toString());
         notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
 
-        return  booking;
+        return  response;
     }
 
     public GetBookingResponse getBooking(GetBookingRequest getBookingRequest){

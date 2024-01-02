@@ -58,6 +58,10 @@ public class UserDAO {
 
     @Enumerated(EnumType.STRING)
     private EStatus status;
+
+    private String trackingId;
+
+    private String merchantId;
 }
 
 

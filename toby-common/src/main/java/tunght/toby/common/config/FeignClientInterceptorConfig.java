@@ -13,7 +13,7 @@ public class FeignClientInterceptorConfig {
         return new RequestInterceptor() {
             @Override
             public void apply(RequestTemplate requestTemplate) {
-                if(shouldApplyInterceptor(requestTemplate)){
+                if(!shouldNotApplyInterceptor(requestTemplate)){
                     // Lấy giá trị Authorization từ đâu đó (có thể sử dụng ThreadLocal hoặc các cơ chế khác)
                     String authorizationHeader = AuthorizationContextHolder.getAuthorization();
 
@@ -25,8 +25,8 @@ public class FeignClientInterceptorConfig {
     }
 
     // Hàm kiểm tra điều kiện để xác định liệu interceptor có thực hiện hay không
-    private boolean shouldApplyInterceptor(RequestTemplate requestTemplate) {
+    private boolean shouldNotApplyInterceptor(RequestTemplate requestTemplate) {
         // Thực hiện logic kiểm tra dựa trên requestTemplate
-        return requestTemplate.url().contains("api-m.sandbox.paypal.com");
+        return requestTemplate.url().contains("v1")||requestTemplate.url().contains("v2");
     }
 }
