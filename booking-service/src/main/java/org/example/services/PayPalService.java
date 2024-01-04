@@ -77,7 +77,8 @@ public class PayPalService {
         String amountUSD = convertVNDtoUSD(booking.getPrice());
         String orderTitle = "Đặt sân số %s, cơ sở %s, thời gian: %s-%s, %s";
         orderTitle = String.format(orderTitle, booking.getFieldIndex(), booking.getFacilityName(), booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getDate());
-        String returnURL = "http://localhost:3030/profile/"+ booking.getUserId() +"?tab=my-booking";
+//        String returnURL = "http://localhost:3030/profile/"+ booking.getUserId() +"?tab=my-booking";
+        String returnURL = "http://localhost:3030/booking/" + booking.getFacilityId();
 
         PayPalCreateOrderRequest request = new PayPalCreateOrderRequest();
         request.setIntent("CAPTURE");
