@@ -2,12 +2,10 @@ package org.example.access;
 
 import feign.Headers;
 import feign.QueryMap;
+import feign.RequestLine;
 import org.example.access.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -26,4 +24,12 @@ public interface PayPalFeignClient {
                                           @RequestHeader("PayPal-Partner-Attribution-Id") String partnerAttributeId,
                                           @RequestHeader("PayPal-Auth-Assertion") String authAssertion,
                                           @RequestBody PayPalCreateOrderRequest request);
+
+    @PostMapping("/v2/checkout/orders/{orderId}/capture")
+    PayPalCaptureOrderResponse captureOrder(@RequestHeader("Authorization") String authorization,
+                                           @RequestHeader("PayPal-Partner-Attribution-Id") String partnerAttributeId,
+                                           @RequestHeader("PayPal-Auth-Assertion") String authAssertion,
+                                            @PathVariable("orderId") String orderId,
+                                            @RequestBody PayPalCreateOrderRequest request);
+
 }

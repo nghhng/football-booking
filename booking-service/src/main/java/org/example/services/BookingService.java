@@ -145,16 +145,8 @@ public class BookingService {
                 .hasOpponent(false)
                 .fieldIndex(createBookingRequest.getFieldIndex())
                 .build();
-
-
-//        var jsonStr = JsonConverter.serializeObject(booking);
-//        redisTemplate.opsForValue()
-//                .set(jwt, jsonStr, Duration.ofSeconds(jwtUtils.getValidSeconds()));
-
         PayPalCreateOrderResponse response = payPalService.createPayPalOrder(booking, facilityOwner.getMerchantId());
-
-        booking = bookingRepository.save(booking);
-
+        booking.setPaypalOrderId(response.getId());
         NotificationDto notificationDto = NotificationDto.builder()
                 .type(ENotifications.BOOKING)
                 .fromUserId(authUserDetails.getId())
@@ -164,8 +156,14 @@ public class BookingService {
                 .isRead(false)
                 .timeStamp(Instant.now())
                 .build();
-        System.out.println("SEND KAFKA: " + notificationDto.toString());
-        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
+
+        var jsonStrBooking = JsonConverter.serializeObject(booking);
+        var jsonStrNoti = JsonConverter.serializeObject(notificationDto);
+        var jsonStr = jsonStrBooking + "|" + facilityOwner.getMerchantId() + "|" + jsonStrNoti;
+
+
+        redisTemplate.opsForValue()
+                .set(booking.getPaypalOrderId(), jsonStr);
 
         return  response;
     }

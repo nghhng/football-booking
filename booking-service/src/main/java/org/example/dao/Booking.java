@@ -51,5 +51,6 @@ public class Booking {
 
     private String opponentId;
 
+    private String paypalOrderId;
 }
 
