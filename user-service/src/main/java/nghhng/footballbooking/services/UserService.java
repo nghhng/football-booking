@@ -6,9 +6,8 @@ import nghhng.footballbooking.dto.CreateUserRequest;
 import nghhng.footballbooking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.ErrorCommon;
-import tunght.toby.common.security.AuthUserDetails;
+import nghhng.common.exception.AppException;
+import nghhng.common.exception.ErrorCommon;
 
 import java.util.List;
 import java.util.Optional;

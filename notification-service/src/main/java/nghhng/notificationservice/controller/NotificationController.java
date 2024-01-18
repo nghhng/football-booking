@@ -5,7 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import nghhng.notificationservice.entity.NotificationEntity;
 import nghhng.notificationservice.service.NotificationService;
-import tunght.toby.common.security.AuthUserDetails;
+import nghhng.common.security.AuthUserDetails;
 
 import java.util.List;
 

@@ -1,8 +1,7 @@
 package org.example.services;
 
 
-import lombok.AllArgsConstructor;
-import org.bson.types.ObjectId;
+import lombok.RequiredArgsConstructor;
 import org.example.access.FacilityFeignClient;
 import org.example.access.UserFeignClient;
 import org.example.access.model.*;
@@ -10,28 +9,29 @@ import org.example.dao.Booking;
 import org.example.dao.Facility;
 import org.example.dao.MatchingRequest;
 import org.example.dao.User;
-import org.example.dao.part.Field;
 import org.example.dao.part.MatchingRequestStatus;
 import org.example.dto.*;
 import org.example.exception.BaseException;
 import org.example.repositories.BookingRepository;
 import org.example.repositories.MatchingRequestRepository;
-import org.example.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.scheduling.support.SimpleTriggerContext;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.ErrorCommon;
-import tunght.toby.common.security.AuthUserDetails;
+import nghhng.common.enums.ENotifications;
+import nghhng.common.exception.AppException;
+import nghhng.common.exception.ErrorCommon;
+import nghhng.common.security.AuthUserDetails;
+import nghhng.common.utils.JsonConverter;
 
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MatchingService {
 
     @Autowired
@@ -48,6 +48,11 @@ public class MatchingService {
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+    @Value(value = "${kafka.request-noti-topic}")
+    private String requestNotiTopoc;
+
+    private final KafkaTemplate<String, Object> notiKafkaTemplate;
 
 //    private final KafkaTemplate<String, CreateBookingEvent> kafkaTemplate;
 
@@ -83,7 +88,25 @@ public class MatchingService {
                 .status(MatchingRequestStatus.PENDING)
                 .build();
         MatchingRequest matchingRequestSaved = matchingRequestRepository.save(matchingRequest);
+
+        NotificationDto notificationDto = NotificationDto.builder()
+                .type(ENotifications.REQUEST)
+                .fromUserId(authUserDetails.getId())
+                .toUserId(booking.getUserId())
+                .detailId(booking.getId())
+                .message(createRequestNotiMessage(requestor, booking))
+                .isRead(false)
+                .timeStamp(Instant.now())
+                .build();
+        System.out.println("SEND KAFKA: " + notificationDto.toString());
+        notiKafkaTemplate.send(requestNotiTopoc, JsonConverter.serializeObject(notificationDto));
+
         return matchingRequestSaved;
+    }
+
+    private String createRequestNotiMessage(User user, Booking booking){
+        String form = "%s đã gửi lời mời ghép đối trận bóng sân số %s, %s, thời gian: %s-%s, %s,";
+        return String.format(form, user.getUsername(), booking.getFieldIndex(), booking.getFacilityName(),  booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getDate());
     }
 
     public Booking respondMatchingRequest(ReponseMatchRequest request, AuthUserDetails authUserDetails) {

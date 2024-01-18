@@ -6,7 +6,6 @@ import nghhng.facilityservice.access.GetUserByUsernameRequest;
 import nghhng.facilityservice.access.GetUserResponse;
 import nghhng.facilityservice.access.UserFeignClient;
 import nghhng.facilityservice.dao.Facility;
-import nghhng.facilityservice.dao.part.Address;
 import nghhng.facilityservice.dto.*;
 import nghhng.facilityservice.exception.BaseException;
 import nghhng.facilityservice.repositories.FacilityRepository;
@@ -15,8 +14,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.ErrorCommon;
+import nghhng.common.exception.AppException;
+import nghhng.common.exception.ErrorCommon;
 
 import java.util.List;
 

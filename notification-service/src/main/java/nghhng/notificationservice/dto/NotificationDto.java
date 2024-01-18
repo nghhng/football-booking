@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import tunght.toby.common.enums.ENotifications;
+import nghhng.common.enums.ENotifications;
 
 import java.time.Instant;
 

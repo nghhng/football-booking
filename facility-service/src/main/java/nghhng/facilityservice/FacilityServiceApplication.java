@@ -8,7 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 
-@SpringBootApplication(scanBasePackages = {"nghhng.facilityservice", "tunght.toby.common"}, exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = {"nghhng.facilityservice", "nghhng.common"}, exclude = {DataSourceAutoConfiguration.class})
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @EnableFeignClients
 @EnableDiscoveryClient

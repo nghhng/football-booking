@@ -3,12 +3,10 @@ package nghhng.notificationservice.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import tunght.toby.common.entity.BaseEntity;
-import tunght.toby.common.enums.ENotifications;
+import nghhng.common.enums.ENotifications;
 
-import javax.persistence.*;
 import java.time.Instant;
-import java.time.ZonedDateTime;
+
 @Document(collection = "notification")
 @Data
 @AllArgsConstructor

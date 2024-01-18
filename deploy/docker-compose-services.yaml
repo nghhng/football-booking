@@ -54,7 +54,7 @@ services:
 
   auth-service:
     build:
-      context: ../toby-auth
+      context: ../nghhng-auth
       dockerfile: Dockerfile
     ports:
       - "8001:8001"

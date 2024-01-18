@@ -1,26 +1,19 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.common.protocol.types.Field;
 import org.example.access.PayPalFeignClient;
 import org.example.access.UserFeignClient;
 import org.example.access.model.*;
 import org.example.dao.Booking;
-import org.example.dao.User;
-import org.example.dto.NotificationDto;
 import org.example.exception.BaseException;
 import org.example.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.security.AuthUserDetails;
-import tunght.toby.common.utils.JsonConverter;
+import nghhng.common.utils.JsonConverter;
 
-import java.awt.print.Book;
-import java.net.URI;
 import java.util.*;
 
 @Service

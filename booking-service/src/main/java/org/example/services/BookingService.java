@@ -1,9 +1,7 @@
 package org.example.services;
 
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.example.access.*;
 import org.example.access.model.*;
 import org.example.dao.Booking;
@@ -24,13 +22,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.enums.ENotifications;
-import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.ErrorCommon;
-import tunght.toby.common.security.AuthUserDetails;
-import tunght.toby.common.utils.JsonConverter;
+import nghhng.common.enums.ENotifications;
+import nghhng.common.exception.AppException;
+import nghhng.common.exception.ErrorCommon;
+import nghhng.common.security.AuthUserDetails;
+import nghhng.common.utils.JsonConverter;
 
 import java.time.Instant;
 import java.util.*;

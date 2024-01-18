@@ -12,9 +12,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import tunght.toby.common.enums.ERole;
-import tunght.toby.common.security.CustomPasswordEncoder;
-import tunght.toby.common.security.JWTAuthFilter;
+import nghhng.common.enums.ERole;
+import nghhng.common.security.CustomPasswordEncoder;
+import nghhng.common.security.JWTAuthFilter;
 
 import java.util.List;
 

@@ -1,19 +1,14 @@
 package nghhng.footballbooking.dao;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import tunght.toby.common.entity.BaseEntity;
-import tunght.toby.common.entity.Comment;
-import tunght.toby.common.enums.ERole;
-import tunght.toby.common.enums.EStatus;
+import nghhng.common.entity.Comment;
+import nghhng.common.enums.ERole;
+import nghhng.common.enums.EStatus;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

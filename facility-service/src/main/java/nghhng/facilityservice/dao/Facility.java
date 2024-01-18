@@ -9,11 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nghhng.facilityservice.dao.part.Address;
 import nghhng.facilityservice.dao.part.Field;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import tunght.toby.common.entity.BaseEntity;
-import tunght.toby.common.entity.Comment;
+import nghhng.common.entity.Comment;
 
 import java.util.List;
 

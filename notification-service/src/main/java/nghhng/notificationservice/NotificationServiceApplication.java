@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication(scanBasePackages = {"nghhng.notificationservice", "tunght.toby.common"}, exclude = {DataSourceAutoConfiguration.class })
+@SpringBootApplication(scanBasePackages = {"nghhng.notificationservice", "nghhng.common"}, exclude = {DataSourceAutoConfiguration.class })
 @EntityScan(basePackages = {"tunght.toby.notification", "tunght.toby.common"})
 public class NotificationServiceApplication {
 

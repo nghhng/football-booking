@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import tunght.toby.common.utils.JsonConverter;
+import nghhng.common.utils.JsonConverter;
 
 @Component
 @RequiredArgsConstructor

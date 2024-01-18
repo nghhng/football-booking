@@ -5,38 +5,24 @@ import lombok.RequiredArgsConstructor;
 import org.example.access.FacilityFeignClient;
 import org.example.access.UserFeignClient;
 import org.example.access.model.*;
-import org.example.dao.Booking;
 import org.example.dao.Facility;
-import org.example.dao.MatchingRequest;
 import org.example.dao.User;
-import org.example.dao.part.Field;
-import org.example.dao.part.MatchingRequestStatus;
 import org.example.dto.*;
 import org.example.exception.BaseException;
 import org.example.repositories.BookingRepository;
 import org.example.repositories.FacilityRepository;
 import org.example.repositories.MatchingRequestRepository;
 import org.example.repositories.UserRepository;
-import org.example.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.entity.BaseEntity;
-import tunght.toby.common.entity.Comment;
-import tunght.toby.common.enums.ENotifications;
-import tunght.toby.common.exception.AppException;
-import tunght.toby.common.exception.ErrorCommon;
-import tunght.toby.common.security.AuthUserDetails;
-import tunght.toby.common.utils.JsonConverter;
+import nghhng.common.entity.Comment;
+import nghhng.common.security.AuthUserDetails;
 
-import javax.imageio.plugins.tiff.FaxTIFFTagSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

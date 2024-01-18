@@ -1,7 +1,7 @@
 package org.example.dto;
 
 import lombok.*;
-import tunght.toby.common.enums.ENotifications;
+import nghhng.common.enums.ENotifications;
 
 import java.time.Instant;
 

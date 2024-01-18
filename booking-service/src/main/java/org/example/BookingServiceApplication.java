@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 
 
-@SpringBootApplication(scanBasePackages = {"org.example", "tunght.toby.common"}, exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = {"org.example", "nghhng.common"}, exclude = {DataSourceAutoConfiguration.class})
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @EnableFeignClients
 @EnableDiscoveryClient

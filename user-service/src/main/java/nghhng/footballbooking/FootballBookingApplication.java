@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication(scanBasePackages = {"nghhng.footballbooking", "tunght.toby.common"}, exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = {"nghhng.footballbooking", "nghhng.common"}, exclude = {DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
 public class FootballBookingApplication {
 

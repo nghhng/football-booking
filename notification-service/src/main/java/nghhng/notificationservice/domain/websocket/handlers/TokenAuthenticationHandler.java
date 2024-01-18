@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import tunght.toby.common.security.AuthUserDetails;
-import tunght.toby.common.utils.JsonConverter;
+import nghhng.common.security.AuthUserDetails;
+import nghhng.common.utils.JsonConverter;
 import nghhng.notificationservice.domain.websocket.manager.UserManager;
 import nghhng.notificationservice.domain.websocket.network.IClientConnection;
 

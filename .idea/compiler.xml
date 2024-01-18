@@ -8,40 +8,41 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="facility-service" />
+        <module name="nghhnng-auth" />
         <module name="discovery-server" />
         <module name="booking-service" />
         <module name="api-gateway" />
-        <module name="toby-auth" />
         <module name="user-service" />
         <module name="notification-service" />
       </profile>
-      <profile name="Annotation profile for toby-common" enabled="true">
+      <profile name="Annotation profile for nghhng-common" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" />
         </processorPath>
-        <module name="toby-common" />
+        <module name="common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="facility.service" target="17" />
       <module name="service" target="17" />
       <module name="toby-notification" target="11" />
+      <module name="toby-parent" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="booking-service" options="-parameters" />
+      <module name="common" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
       <module name="facility-service" options="-parameters" />
       <module name="facility.service" options="-parameters" />
+      <module name="nghhnng-auth" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="service" options="-parameters" />
-      <module name="toby-auth" options="-parameters" />
-      <module name="toby-common" options="-parameters" />
       <module name="toby-notification" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
