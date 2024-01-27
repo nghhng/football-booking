@@ -35,6 +35,9 @@ public class WebSecurityConfiguration {
             "/swagger-ui.html",
             "/images/**",
             "/users/**",
+            "/facility/getByFacilityId**",
+            "/facility/getByFilter**",
+            "/price/getPrice**",
     };
 
     @Bean

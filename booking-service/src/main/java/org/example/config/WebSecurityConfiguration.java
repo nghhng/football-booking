@@ -35,6 +35,8 @@ public class WebSecurityConfiguration {
             "/swagger-ui.html",
             "/images/**",
             "/users/**",
+            "/booking/getBooking**",
+            "/booking/getAvailableFields**",
     };
 
     @Bean

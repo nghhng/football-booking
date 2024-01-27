@@ -8,7 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="facility-service" />
-        <module name="nghhnng-auth" />
+        <module name="nghhng-auth" />
         <module name="discovery-server" />
         <module name="booking-service" />
         <module name="api-gateway" />
@@ -40,7 +40,7 @@
       <module name="discovery-server" options="-parameters" />
       <module name="facility-service" options="-parameters" />
       <module name="facility.service" options="-parameters" />
-      <module name="nghhnng-auth" options="-parameters" />
+      <module name="nghhng-auth" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="service" options="-parameters" />
       <module name="toby-notification" options="-parameters" />
