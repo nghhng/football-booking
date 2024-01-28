@@ -30,6 +30,12 @@ public class BookingController {
         return new ResponseEntity<PayPalCreateOrderResponse>(bookingService.createBooking(createBookingRequest, authUserDetails), HttpStatus.OK);
     }
 
+    @Operation(summary = "Api create booking by owner")
+    @PostMapping("createBookingByOwner")
+    public ResponseEntity<Booking> createBookingByOwner(@RequestBody CreateBookingRequest createBookingRequest, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+        return new ResponseEntity<Booking>(bookingService.createBookingByOwner(createBookingRequest, authUserDetails), HttpStatus.OK);
+    }
+
     @PostMapping("getBooking")
     public ResponseEntity<GetBookingResponse> getBooking(@RequestBody GetBookingRequest getBookingRequest){
         return new ResponseEntity<GetBookingResponse>(bookingService.getBooking(getBookingRequest), HttpStatus.OK);

@@ -149,20 +149,112 @@ public class BookingService {
                 .fromUserId(authUserDetails.getId())
                 .toUserId(bookedFacility.getOwnerId())
                 .detailId(booking.getId())
-                .message(createBookingNotiMessage(user, booking))
+                .message(createBookingByOwnerNotiMessage(user, booking))
                 .isRead(false)
                 .timeStamp(Instant.now())
                 .build();
 
-        var jsonStrBooking = JsonConverter.serializeObject(booking);
-        var jsonStrNoti = JsonConverter.serializeObject(notificationDto);
-        var jsonStr = jsonStrBooking + "|" + facilityOwner.getMerchantId() + "|" + jsonStrNoti;
 
-
-        redisTemplate.opsForValue()
-                .set(booking.getPaypalOrderId(), jsonStr);
 
         return  response;
+    }
+
+    public Booking createBookingByOwner(CreateBookingRequest createBookingRequest, AuthUserDetails authUserDetails ){
+
+        GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(createBookingRequest.getFacilityId());
+        //check Facility and maximum number of fields
+        Facility bookedFacility = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
+        if(bookedFacility==null){
+            throw new BaseException("Facility not exists");
+        }
+//        for(Field field : response.getFields()){
+//            if(field.getType().equals(createBookingRequest.getFieldType())){
+//                if(Integer.parseInt(field.getNumber())<createBookingRequest.getNumberOfFields()){
+//                    throw new BaseException("Not enough fields to book");
+//                } else break;
+//            }
+//        }
+        //Check Booking
+        GetBookingRequest getBookingRequest = GetBookingRequest.builder()
+                .facilityId(createBookingRequest.getFacilityId())
+                .fieldIndex(createBookingRequest.getFieldIndex())
+                .startAt(createBookingRequest.getStartAt())
+                .endAt(createBookingRequest.getEndAt())
+                .date(createBookingRequest.getDate())
+                .build();
+        GetBookingResponse booked = getBooking(getBookingRequest);
+        if(booked.getData().size()!=0){
+            throw new BaseException("This field is already booked at this timeslot");
+        }
+        //get Type of selected field
+        String bookingType = new String();
+        Optional<Field> selectedField = bookedFacility.getFields().stream()
+                .filter(field -> createBookingRequest.getFieldIndex().equals(field.getIndex()))
+                .findFirst();
+        if(selectedField.isPresent()){
+            bookingType = selectedField.get().getType();
+        } else {
+            throw new BaseException("Can not find the field with given index");
+        }
+
+
+        //get Price
+        GetPriceRequest getPriceRequest = new GetPriceRequest(createBookingRequest.getFacilityId(),bookingType , createBookingRequest.getStartAt(), createBookingRequest.getEndAt());
+        List<GetPriceResponse> getPriceResponses = facilityFeignClient.getPrice(getPriceRequest);
+
+        String price = new String();
+        //check the date is weekend of not then calculate price
+        if(!Utils.isWeekend(createBookingRequest.getDate())){
+            price = String.valueOf(getPriceResponses.get(0).getAmount());
+        } else{
+            price = String.valueOf(getPriceResponses.get(0).getSpecialAmount());
+        }
+
+
+        String priceId = getPriceResponses.get(0).getId();
+        //select Field
+        //now set Field index random
+//        List<BookField> bookFields = new ArrayList<BookField>();
+//        for(int i=0; i<createBookingRequest.getNumberOfFields(); i++){
+//            BookField bookField = new BookField();
+//            bookField.setIndex(String.valueOf(i));
+//            bookField.setType(createBookingRequest.getFieldType());
+//            bookFields.add(bookField);
+//        }
+        User user = userFeignClient.getUserById(new GetUserByIdRequest(authUserDetails.getId()));
+        User facilityOwner = userFeignClient.getUserById(new GetUserByIdRequest(bookedFacility.getOwnerId()));
+        if(!user.getId().equals(facilityOwner.getId())){
+            throw new BaseException("Bạn không phải chủ của sân này");
+        }
+
+        Booking booking = Booking.builder()
+                .facilityId(createBookingRequest.getFacilityId())
+                .facilityName(bookedFacility.getName())
+                .userId(authUserDetails.getId())
+                .userName(user.getName())
+                .userImage(user.getImage())
+                .date(createBookingRequest.getDate())
+                .priceId(priceId)
+                .price(price)
+                .startAt(createBookingRequest.getStartAt())
+                .endAt(createBookingRequest.getEndAt())
+                .hasOpponent(false)
+                .fieldIndex(createBookingRequest.getFieldIndex())
+                .build();
+        NotificationDto notificationDto = NotificationDto.builder()
+                .type(ENotifications.BOOKING)
+                .fromUserId(authUserDetails.getId())
+                .toUserId(bookedFacility.getOwnerId())
+                .detailId(booking.getId())
+                .message(createBookingByOwnerNotiMessage(user, booking))
+                .isRead(false)
+                .timeStamp(Instant.now())
+                .build();
+
+        notiKafkaTemplate.send(bookingNotiTopic, JsonConverter.serializeObject(notificationDto));
+
+
+        return booking;
     }
 
     public GetBookingResponse getBooking(GetBookingRequest getBookingRequest){
@@ -278,5 +370,10 @@ public class BookingService {
     private String createBookingNotiMessage(User user, Booking booking){
         String form = "%s đã đặt sân số %s, thời gian: %s-%s, %s";
         return String.format(form, user.getUsername(), booking.getFieldIndex(), booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getDate());
+    }
+
+    private String createBookingByOwnerNotiMessage(User user, Booking booking){
+        String form = "Bạn đã tự đặt sân số %s, thời gian: %s-%s, %s";
+        return String.format(form, booking.getFieldIndex(), booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getDate());
     }
 }
