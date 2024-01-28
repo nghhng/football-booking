@@ -36,6 +36,12 @@ public class BookingController {
         return new ResponseEntity<Booking>(bookingService.createBookingByOwner(createBookingRequest, authUserDetails), HttpStatus.OK);
     }
 
+    @Operation(summary = "Api create bulk booking")
+    @PostMapping("createBulkBooking")
+    public ResponseEntity<PayPalCreateOrderResponse> createBulkBooking(@RequestBody CreateBulkBookingRequest createBulkBookingRequest, @AuthenticationPrincipal AuthUserDetails authUserDetails){
+        return new ResponseEntity<PayPalCreateOrderResponse>(bookingService.createBulkBooking(createBulkBookingRequest, authUserDetails), HttpStatus.OK);
+    }
+
     @PostMapping("getBooking")
     public ResponseEntity<GetBookingResponse> getBooking(@RequestBody GetBookingRequest getBookingRequest){
         return new ResponseEntity<GetBookingResponse>(bookingService.getBooking(getBookingRequest), HttpStatus.OK);

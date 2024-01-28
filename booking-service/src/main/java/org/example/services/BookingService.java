@@ -29,7 +29,10 @@ import nghhng.common.exception.ErrorCommon;
 import nghhng.common.security.AuthUserDetails;
 import nghhng.common.utils.JsonConverter;
 
+import java.time.DayOfWeek;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -153,10 +156,99 @@ public class BookingService {
                 .isRead(false)
                 .timeStamp(Instant.now())
                 .build();
-
-
-
+        var jsonStrBooking = JsonConverter.serializeObject(booking);
+        var jsonStrNoti = JsonConverter.serializeObject(notificationDto);
+        var jsonStrType = "SINGLE";
+        var jsonStr = jsonStrBooking + "|" + facilityOwner.getMerchantId() + "|" + jsonStrNoti + "|" + jsonStrType;
+        redisTemplate.opsForValue()
+                .set(booking.getPaypalOrderId(), jsonStr);
         return  response;
+    }
+
+    public PayPalCreateOrderResponse createBulkBooking(CreateBulkBookingRequest createBookingRequest, AuthUserDetails authUserDetails ){
+
+        GetFacilityByFacilityIdRequest getFacilityByFacilityIdRequest = new GetFacilityByFacilityIdRequest(createBookingRequest.getFacilityId());
+        //check Facility and maximum number of fields
+        Facility bookedFacility = facilityFeignClient.getFacilityById(getFacilityByFacilityIdRequest);
+        if(bookedFacility==null){
+            throw new BaseException("Facility not exists");
+        }
+        //get Type of selected field
+        String bookingType = new String();
+        Optional<Field> selectedField = bookedFacility.getFields().stream()
+                .filter(field -> createBookingRequest.getFieldIndex().equals(field.getIndex()))
+                .findFirst();
+        if(selectedField.isPresent()){
+            bookingType = selectedField.get().getType();
+        } else {
+            throw new BaseException("Can not find the field with given index");
+        }
+        //get Price
+        GetPriceRequest getPriceRequest = new GetPriceRequest(createBookingRequest.getFacilityId(),bookingType , createBookingRequest.getStartAt(), createBookingRequest.getEndAt());
+        List<GetPriceResponse> getPriceResponses = facilityFeignClient.getPrice(getPriceRequest);
+
+        String price = new String();
+        //check the date is weekend of not then calculate price
+        if(!Utils.isWeekend(createBookingRequest.getDate())){
+            price = String.valueOf(getPriceResponses.get(0).getAmount());
+        } else{
+            price = String.valueOf(getPriceResponses.get(0).getSpecialAmount());
+        }
+        String totalPrice = String.valueOf(Integer.parseInt(price)*createBookingRequest.getNumOfWeeks());
+        String priceId = getPriceResponses.get(0).getId();
+
+        //get all days
+        List<String> bookedDays = getNextWeekDays(createBookingRequest.getDate(), createBookingRequest.getNumOfWeeks());
+        for(String bookedDay : bookedDays){
+            //Check Booking
+            GetBookingRequest getBookingRequest = GetBookingRequest.builder()
+                    .facilityId(createBookingRequest.getFacilityId())
+                    .fieldIndex(createBookingRequest.getFieldIndex())
+                    .startAt(createBookingRequest.getStartAt())
+                    .endAt(createBookingRequest.getEndAt())
+                    .date(bookedDay)
+                    .build();
+            GetBookingResponse booked = getBooking(getBookingRequest);
+            if(booked.getData().size()!=0){
+                throw new BaseException("This field at this timeslot is already booked on this date: " + bookedDay);
+            }
+        }
+        User user = userFeignClient.getUserById(new GetUserByIdRequest(authUserDetails.getId()));
+        User facilityOwner = userFeignClient.getUserById(new GetUserByIdRequest(bookedFacility.getOwnerId()));
+        BulkBooking booking = BulkBooking.builder()
+                    .facilityId(createBookingRequest.getFacilityId())
+                    .facilityName(bookedFacility.getName())
+                    .userId(authUserDetails.getId())
+                    .userName(user.getName())
+                    .userImage(user.getImage())
+                    .date(createBookingRequest.getDate())
+                    .priceId(priceId)
+                    .price(totalPrice)
+                    .startAt(createBookingRequest.getStartAt())
+                    .endAt(createBookingRequest.getEndAt())
+                    .fieldIndex(createBookingRequest.getFieldIndex())
+                    .numOfWeeks(createBookingRequest.getNumOfWeeks())
+                    .bookedDays(bookedDays)
+                    .oneMatchPrice(price)
+                    .build();
+
+        PayPalCreateOrderResponse response = payPalService.createBulkPayPalOrder(booking, facilityOwner.getMerchantId());
+        booking.setPaypalOrderId(response.getId());
+        NotificationDto notificationDto = NotificationDto.builder()
+                .type(ENotifications.BOOKING)
+                .fromUserId(authUserDetails.getId())
+                .toUserId(bookedFacility.getOwnerId())
+                .message(createBulkBookingNotiMessage(user, booking))
+                .isRead(false)
+                .timeStamp(Instant.now())
+                .build();
+        var jsonStrBooking = JsonConverter.serializeObject(booking);
+        var jsonStrNoti = JsonConverter.serializeObject(notificationDto);
+        var jsonStrType = "BULK";
+        var jsonStr = jsonStrBooking + "|" + facilityOwner.getMerchantId() + "|" + jsonStrNoti + "|" + jsonStrType;
+        redisTemplate.opsForValue()
+                .set(booking.getPaypalOrderId(), jsonStr);
+        return response;
     }
 
     public Booking createBookingByOwner(CreateBookingRequest createBookingRequest, AuthUserDetails authUserDetails ){
@@ -375,5 +467,31 @@ public class BookingService {
     private String createBookingByOwnerNotiMessage(User user, Booking booking){
         String form = "Bạn đã tự đặt sân số %s, thời gian: %s-%s, %s";
         return String.format(form, booking.getFieldIndex(), booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getDate());
+    }
+    private String createBulkBookingNotiMessage(User user, BulkBooking booking){
+        String form = "%s đã đặt sân số %s, thời gian: %s-%s, trong %s tuần từ ngày %s";
+        return String.format(form, user.getUsername(), booking.getFieldIndex(), booking.getStartAt().toString(), booking.getEndAt().toString(), booking.getNumOfWeeks(), booking.getDate());
+    }
+
+    public static List<String> getNextWeekDays(String date, int numberOfWeeks) {
+        // Chuyển đổi ngày từ chuỗi sang LocalDate
+        LocalDate inputDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+
+        // Xác định thứ của ngày đầu vào
+        DayOfWeek dayOfWeek = inputDate.getDayOfWeek();
+
+        // Tạo danh sách chứa ngày của các tuần tiếp theo
+        List<String> nextWeekDays = new ArrayList<>();
+
+        // Thêm ngày của các tuần tiếp theo vào danh sách
+        for (int i = 0; i < numberOfWeeks; i++) {
+            LocalDate nextWeekDate = inputDate.plusWeeks(i);
+            LocalDate nextWeekDayWithSameOfWeek = nextWeekDate.with(DayOfWeek.from(dayOfWeek));
+
+            // Định dạng ngày và thêm vào danh sách
+            nextWeekDays.add(nextWeekDayWithSameOfWeek.format(DateTimeFormatter.ISO_DATE));
+        }
+
+        return nextWeekDays;
     }
 }
