@@ -17,6 +17,7 @@ import org.example.repositories.MatchingRequestRepository;
 import org.example.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -378,6 +379,7 @@ public class BookingService {
             }
         }
         query.addCriteria(criteria);
+        query.with(Sort.by(Sort.Order.asc("date")));
         List<Booking> totalBookings = mongoTemplate.find(query, Booking.class);
         //Get paged booking
         if(getBookingRequest.getLimit()!=null){
